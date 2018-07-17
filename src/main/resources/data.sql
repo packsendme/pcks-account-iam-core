@@ -1,0 +1,1 @@
+INSERT INTO User (id, username, password, name, activated, activationKey, resetPasswordKey) VALUES (1, 'ricardomarzochi', '$2a$10$e70vxOEf7GCuCMz1I53YXO3XkEVrxeEdI6hHNvk0iHGu84.nvg3fC','Ricardo',1,'','');
