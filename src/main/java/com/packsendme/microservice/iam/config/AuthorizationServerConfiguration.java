@@ -33,8 +33,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Value("${security.oauth2.client.scope}")
     private String[] scopes;
 
-   // @Value("${security.oauth2.client.client-secret}")
-    private String secret = "$2a$10$jJFbSMGC2xsOqIlYYLqRouBDGRsvnP.egfdw3MutRXzHdhNoNnBA6";
+    @Value("${security.oauth2.client.client-secret}")
+    private String secret;
 
     @Value("${security.oauth2.client.access-token-validity-seconds}")
     private Integer accessTokenValiditySeconds;
