@@ -1,4 +1,4 @@
-package com.packsendme.microservice.oauth.microserviceoauthserver;
+package com.packsendme.microservice.iam.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MicroserviceOauthServerApplicationTests {
+public class MicroserviceIAMServerApplicationTests {
 
 	@Test
 	public void contextLoads() {
