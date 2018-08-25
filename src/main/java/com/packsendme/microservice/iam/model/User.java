@@ -1,26 +1,21 @@
 package com.packsendme.microservice.iam.model;
 
+import java.io.Serializable;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "User")
-public class User {
+public class User implements Serializable {
 
-	private @Id String id;
-    
-    private String name;
-    
-    private String username;
-    
-    private String password;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private boolean activated;
-    
-    private String activationKey;
-	
-    private String resetPasswordKey;
-    
-    public String getId() {
+	@Id
+	private String id;
+	public String getId() {
 		return id;
 	}
 
@@ -28,12 +23,21 @@ public class User {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
+	private String username;
+    private String password;
+    private boolean activated;
+    private String activationKey;
+    private boolean resetPasswordKey;
 
-	public void setName(String name) {
-		this.name = name;
+	public User(String id,String username, String password, boolean activated, String activationKey,
+			boolean resetPasswordKey) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.activated = activated;
+		this.activationKey = activationKey;
+		this.resetPasswordKey = resetPasswordKey;
 	}
 
 	public String getUsername() {
@@ -68,29 +72,12 @@ public class User {
 		this.activationKey = activationKey;
 	}
 
-	public String getResetPasswordKey() {
+	public boolean getResetPasswordKey() {
 		return resetPasswordKey;
 	}
 
-	public void setResetPasswordKey(String resetPasswordKey) {
+	public void setResetPasswordKey(boolean resetPasswordKey) {
 		this.resetPasswordKey = resetPasswordKey;
 	}
-
-	public User() {
-    }
-    
-    public User(String id, String name, String username,String password, boolean activated, String activationKey,String resetPasswordKey) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.username = username;
-		this.password = password;
-		this.activated = activated;
-		this.activationKey = activationKey;
-		this.resetPasswordKey = resetPasswordKey;
-	}
-    
-    
-    
 
 }
