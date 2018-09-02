@@ -1,4 +1,4 @@
-package com.packsendme.microservice.iam.model;
+package com.packsendme.microservice.iam.repository;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "User")
-public class User implements Serializable {
+public class UserModel implements Serializable {
 
 	/**
 	 * 
@@ -14,25 +14,19 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
+    private String id;
 	private String username;
     private String password;
     private boolean activated;
     private String activationKey;
     private boolean resetPasswordKey;
+    
+    public UserModel() {
+	}
 
-	public User(String id,String username, String password, boolean activated, String activationKey,
+	public UserModel(String username, String password, boolean activated, String activationKey,
 			boolean resetPasswordKey) {
 		super();
-		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.activated = activated;
@@ -78,6 +72,14 @@ public class User implements Serializable {
 
 	public void setResetPasswordKey(boolean resetPasswordKey) {
 		this.resetPasswordKey = resetPasswordKey;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }
