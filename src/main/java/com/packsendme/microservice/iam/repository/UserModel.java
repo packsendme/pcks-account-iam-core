@@ -1,39 +1,37 @@
-package com.packsendme.microservice.iam.model;
+package com.packsendme.microservice.iam.repository;
+
+import java.io.Serializable;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "User")
-public class User {
+public class UserModel implements Serializable {
 
-	private @Id String id;
-    
-    private String name;
-    
-    private String username;
-    
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    private String id;
+	private String username;
     private String password;
-
     private boolean activated;
-    
     private String activationKey;
-	
-    private String resetPasswordKey;
+    private boolean resetPasswordKey;
     
-    public String getId() {
-		return id;
+    public UserModel() {
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public UserModel(String username, String password, boolean activated, String activationKey,
+			boolean resetPasswordKey) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.activated = activated;
+		this.activationKey = activationKey;
+		this.resetPasswordKey = resetPasswordKey;
 	}
 
 	public String getUsername() {
@@ -68,29 +66,20 @@ public class User {
 		this.activationKey = activationKey;
 	}
 
-	public String getResetPasswordKey() {
+	public boolean getResetPasswordKey() {
 		return resetPasswordKey;
 	}
 
-	public void setResetPasswordKey(String resetPasswordKey) {
+	public void setResetPasswordKey(boolean resetPasswordKey) {
 		this.resetPasswordKey = resetPasswordKey;
 	}
 
-	public User() {
-    }
-    
-    public User(String id, String name, String username,String password, boolean activated, String activationKey,String resetPasswordKey) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.username = username;
-		this.password = password;
-		this.activated = activated;
-		this.activationKey = activationKey;
-		this.resetPasswordKey = resetPasswordKey;
+	public String getId() {
+		return id;
 	}
-    
-    
-    
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 }
