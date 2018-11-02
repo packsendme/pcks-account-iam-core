@@ -45,18 +45,18 @@ public class UserService {
 			// User does not exist in user base 
 			if(userFind == null) {
 				userFind = registerOrUpdateUserAccess(username, usernamenew, operation);
-				Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USERNAME_REGISTER, HttpExceptionPackSend.USERNAME_REGISTER.name(), userFind);
+				Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USERNAME_REGISTER.value(), HttpExceptionPackSend.USERNAME_REGISTER.getAction(), userFind);
 				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 			}
 			// User already exists in the database 
 			else {
-				Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_USER, HttpExceptionPackSend.FOUND_USER.name(), null);
+				Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_USER.value(), HttpExceptionPackSend.FOUND_USER.getAction(), null);
 				return new ResponseEntity<>(responseObj,HttpStatus.FOUND);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION, HttpStatus.BAD_REQUEST.toString(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);		
 		}
 	}
@@ -69,11 +69,11 @@ public class UserService {
 			entity.setActivated(true);
 			entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY_FALSE);
 			entity = userDAO.update(entity);
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED, HttpExceptionPackSend.USER_ACCESS_CREATED.name(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED.value(), HttpExceptionPackSend.USER_ACCESS_CREATED.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 		}
 		catch (Exception e) {
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION, HttpExceptionPackSend.FAIL_EXECUTION.name(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -93,11 +93,11 @@ public class UserService {
 			entity.setActivated(true);
 			entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY_FALSE);
 			entity = userDAO.update(entity);
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED, HttpExceptionPackSend.USER_ACCESS_CREATED.name(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED.value(), HttpExceptionPackSend.USER_ACCESS_CREATED.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 		}
 		catch (Exception e) {
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION, HttpExceptionPackSend.FAIL_EXECUTION.name(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -132,12 +132,12 @@ public class UserService {
 			if(entity != null) {
 				userDAO.remove(entity);
 			}
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_DELETE, HttpExceptionPackSend.USER_DELETE.name(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_DELETE.value(), HttpExceptionPackSend.USER_DELETE.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION, HttpExceptionPackSend.FAIL_EXECUTION.name(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -158,30 +158,30 @@ public class UserService {
 						ResponseEntity<?> opResultUser = allowUserAccessChangeUsername(username,usernameNew);
 						// Result Operation - Update User Collection
 						if(opResultUser.getStatusCode()  == HttpStatus.ACCEPTED) {
-							Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT, HttpExceptionPackSend.UPDATE_ACCOUNT.name(), null);
+							Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT.value(), HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 							return new ResponseEntity<>(responseObj, HttpStatus.OK);
 						}
 						// ERRO UPDATE USRENAME COLLECTION USER
 						else {
 							ResponseEntity<?> opResultAccountUp = accountCliente.changeUsernameAccount(usernameNew,username);
-							Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION, HttpExceptionPackSend.FAIL_EXECUTION.name(), null);
+							Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 							return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 						}
 					}
 					else {
-						Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION, HttpExceptionPackSend.FAIL_EXECUTION.name(), null);
+						Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 						return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 				}
 				// Validate Operation Create Access first Register
 				else {
-					Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE, HttpExceptionPackSend.FOUND_SMS_CODE.name(), null);
+					Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.value(), HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 					return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 				}
 	
 			}
 			else {
-				Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.NOT_FOUND_SMS_CODE, HttpExceptionPackSend.NOT_FOUND_SMS_CODE.name(), null);
+				Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.NOT_FOUND_SMS_CODE.value(), HttpExceptionPackSend.NOT_FOUND_SMS_CODE.getAction(), null);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
@@ -189,7 +189,7 @@ public class UserService {
 			e.printStackTrace();
 			System.out.println(" ---------------------------- F U D E O ----------------------------");
 			ResponseEntity<?> opResultAccountUp = accountCliente.changeUsernameAccount(usernameNew,username);
-			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION, HttpExceptionPackSend.FAIL_EXECUTION.name(), null);
+			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
