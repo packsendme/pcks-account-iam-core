@@ -33,7 +33,7 @@ public class UserController {
 			return userService.cancelUserAccess(username);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path="/validate/access/user/{username}", 
+	@RequestMapping(method = RequestMethod.POST, path="/validate/username/{username}", 
 	produces = {MediaType.APPLICATION_JSON_VALUE},
 	consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> usernameFirstUserAccess(@Validated @PathVariable("username") String username) {
@@ -50,7 +50,7 @@ public class UserController {
 	}
 
 	
-	@RequestMapping(method = RequestMethod.GET, path="/validate/access/sms/{username}/{smscode}", 
+	@RequestMapping(method = RequestMethod.GET, path="/validate/smscode/{username}/{smscode}", 
 	produces = {MediaType.APPLICATION_JSON_VALUE},
 	consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> smsCodeFirstUserAccess(@Validated @PathVariable("username") String username, @Validated @PathVariable("smscode") String smscode) {
