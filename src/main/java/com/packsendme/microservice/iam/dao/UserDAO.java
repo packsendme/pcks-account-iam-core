@@ -29,19 +29,14 @@ public class UserDAO implements IUserMongo {
 	@Override
 	public UserModel find(UserModel entity) {
 		UserModel user = null;
-		try {
-			if(entity.getUsername() != null && entity.getActivationKey() == null) {
-				user = userRepository.findUserByUsername(entity.getUsername());
-			}
-			else if(entity.getUsername() != null && entity.getActivationKey() != null) {
-				user = userRepository.findUserByUsernameAndSMSCode(entity.getUsername(), entity.getActivationKey());
-			}
-			return user;
+		
+		if(entity.getUsername() != null && entity.getActivationKey() == null) {
+			user = userRepository.findUserByUsername(entity.getUsername());
 		}
-		catch (MongoClientException e ) {
-			e.printStackTrace();
-			return null;
+		else if(entity.getUsername() != null && entity.getActivationKey() != null) {
+			user = userRepository.findUserByUsernameAndSMSCode(entity.getUsername(), entity.getActivationKey());
 		}
+		return user;
 	}
 
 	@Override
