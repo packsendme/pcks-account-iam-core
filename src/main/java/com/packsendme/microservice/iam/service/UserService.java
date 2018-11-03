@@ -148,7 +148,7 @@ public class UserService {
 	
 	public ResponseEntity<?> getSMSValidateProcess(String username, String usernameNew, String smscode) {
 		try {
-			if(getSMSCodeCheck(username,smscode) == MicroservicesConstants.SMS_VALIDATE_SUCCESS) {
+			if(getSMSCodeCheck(username,smscode) == MicroservicesConstants.SMS_VALIDATE_FOUND) {
 				// Validate Operation Update 
 				if(usernameNew != null) {
 					System.out.println(" getSMSValidateProcess "+ usernameNew);
@@ -186,32 +186,24 @@ public class UserService {
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(" ---------------------------- F U D E O ----------------------------");
 			ResponseEntity<?> opResultAccountUp = accountCliente.changeUsernameAccount(usernameNew,username);
 			Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FAIL_EXECUTION.value(), HttpExceptionPackSend.FAIL_EXECUTION.getAction(), null);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
-	public boolean getSMSCodeCheck(String username, String sms) {
-		try {
+	public boolean getSMSCodeCheck(String username, String sms) throws Exception {
 			UserModel entity = new UserModel(); 
 			entity.setUsername(username);
 			entity.setActivationKey(sms);
 			entity = userDAO.find(entity);
 			
 			if(entity == null) {
-				return MicroservicesConstants.SMS_VALIDATE_ERROR;
+				return MicroservicesConstants.SMS_VALIDATE_NOTFOUND;
 			}
 			else{
-				return MicroservicesConstants.SMS_VALIDATE_SUCCESS;
+				return MicroservicesConstants.SMS_VALIDATE_FOUND;
 			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return MicroservicesConstants.SMS_VALIDATE_ERROR;
-		}
 	}
 		
 }
