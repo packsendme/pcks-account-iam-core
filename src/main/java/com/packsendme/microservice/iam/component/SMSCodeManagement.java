@@ -18,7 +18,7 @@ public class SMSCodeManagement {
 		   numbers.add(i);
 		}
 		Random random = new Random();
-		for(int n = 1; n<=5;n++) {
+		for(int n = 1; n<=4;n++) {
 			  int randomIndex = random.nextInt(numbers.size());
 			   numberCodSMS = randomIndex + numberCodSMS;
 			   numbers.remove(randomIndex);
