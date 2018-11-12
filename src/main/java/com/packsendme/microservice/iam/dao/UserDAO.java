@@ -30,12 +30,16 @@ public class UserDAO implements IUserMongo {
 	public UserModel find(UserModel entity) {
 		UserModel user = null;
 		
-		if(entity.getUsername() != null && entity.getActivationKey() == null) {
+		if(entity.getUsername() != null && entity.getPassword() == null && entity.getActivationKey() == null) {
 			user = userRepository.findUserByUsername(entity.getUsername());
 		}
-		else if(entity.getUsername() != null && entity.getActivationKey() != null) {
+		else if(entity.getUsername() != null && entity.getPassword() == null && entity.getActivationKey() != null) {
 			user = userRepository.findUserByUsernameAndSMSCode(entity.getUsername(), entity.getActivationKey());
 		}
+		else if(entity.getUsername() != null && entity.getPassword() != null && entity.getActivationKey() == null) {
+			user = userRepository.findUserByLogin(entity.getUsername(), entity.getPassword());
+		}
+
 		return user;
 	}
 

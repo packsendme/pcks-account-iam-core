@@ -1,17 +1,11 @@
-package com.packsendme.microservice.iam.repository;
+package com.packsendme.microservice.iam.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "User")
-public class UserModel implements Serializable {
+public class UserDto implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -21,23 +15,22 @@ public class UserModel implements Serializable {
     private boolean activated;
     private String activationKey;
     private boolean resetPasswordKey;
-    private Date dtCreation;
-    private Date dtUpdate;
+    private String dtAction;
     
     
-    public UserModel() {
+    public UserDto() {
 	}
 
-	public UserModel(String username, String password, boolean activated, String activationKey,
-			boolean resetPasswordKey,Date dtCreation,Date dtUpdate) {
+	public UserDto(String username, String password, boolean activated, String activationKey,
+			boolean resetPasswordKey, String dtAction) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.activated = activated;
 		this.activationKey = activationKey;
 		this.resetPasswordKey = resetPasswordKey;
-		this.setDtCreation(dtCreation);
-		this.setDtUpdate(dtUpdate);
+		this.dtAction = dtAction;
+		
 	}
 
 	public String getUsername() {
@@ -88,20 +81,12 @@ public class UserModel implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDtCreation() {
-		return dtCreation;
+	public String getDtAction() {
+		return dtAction;
 	}
 
-	public void setDtCreation(Date dtCreation) {
-		this.dtCreation = dtCreation;
-	}
-
-	public Date getDtUpdate() {
-		return dtUpdate;
-	}
-
-	public void setDtUpdate(Date dtUpdate) {
-		this.dtUpdate = dtUpdate;
+	public void setDtAction(String dtAction) {
+		this.dtAction = dtAction;
 	}
 
 }
