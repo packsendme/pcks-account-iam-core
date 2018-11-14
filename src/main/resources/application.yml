@@ -6,9 +6,22 @@ feign:
         readTimeout: 50000
         loggerLevel: full
 
+
 hystrix:
- command:
-   default:
-     execution:
-        timeout:
-          enabled: false
+  command:
+    myclient:
+      coreSize: 3
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1
+    default:
+      coreSize: 20
+      maximumSize: 500
+      allowMaximumSizeToDivergeFromCoreSize: true
+      maxQueueSize: 50000
+      queueSizeRejectionThreshold: 50000
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000000
