@@ -32,13 +32,13 @@ public class UserController {
 		return firstAccessService.findUserToFirstAccess(username,dtAction);
 	}
 
-	@GetMapping("/iam/identity/{username}/{smscode}")
+	@GetMapping("/iam/identity/sms/{username}/{smscode}")
 	public ResponseEntity<?> validateSMSCodeFirstUserAccess(@Validated @PathVariable("username") String username, @Validated @PathVariable("smscode") String smscode) throws Exception {
 		return firstAccessService.findSMSCodeUserToFirstAccess(username,smscode);
 	}
 	
 	
-	@PutMapping("/iam/identity/{username}/{password}")
+	@PutMapping("/iam/access/{username}/{password}")
 	public ResponseEntity<?> allowsFirstUserAccess(@Validated @PathVariable("username") String username, @Validated @PathVariable("password") String password) throws Exception {
 		return firstAccessService.enableFirstUserAccess(username,password);
 	}
