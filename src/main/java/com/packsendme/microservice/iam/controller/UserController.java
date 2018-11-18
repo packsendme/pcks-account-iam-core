@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,11 +39,11 @@ public class UserController {
 	}
 	
 	
-	@PutMapping("/iam/access/{username}/{password}/{dtAction}")
-	public ResponseEntity<?> allowsFirstUserAccess(@Validated @PathVariable("username") String username, 
+	@PostMapping("/iam/identity/{username}/{password}/{dtAction}")
+	public ResponseEntity<?> createUser(@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("password") String password,
 			@Validated @PathVariable ("dtAction") String dtAction) throws Exception {
-		return firstAccessService.enableFirstUserAccess(username,password, dtAction);
+		return firstAccessService.registerUser(username,password, dtAction);
 	}
 
 	@GetMapping("/iam/access/{username}/{password}")
