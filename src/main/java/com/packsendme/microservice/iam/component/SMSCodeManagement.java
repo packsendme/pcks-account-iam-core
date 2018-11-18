@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SMSCodeManagement {
 	
-	public String generateSMSCode() {
+	public long generateSMSCode() {
 		
-		String numberCodSMS = "";
+		String codSMS = "";
+		long numcodSMS = 0;
+
 		// Metemos en una lista los números del 1 al 40.
 		List<Integer> numbers = new ArrayList<>(40);
 		for (int i=1;i<10;i++){
@@ -20,10 +22,11 @@ public class SMSCodeManagement {
 		Random random = new Random();
 		for(int n = 1; n<=4;n++) {
 			  int randomIndex = random.nextInt(numbers.size());
-			   numberCodSMS = randomIndex + numberCodSMS;
+			  codSMS = randomIndex + codSMS;
 			   numbers.remove(randomIndex);
 		}
-		return numberCodSMS;
+		numcodSMS = Long.parseLong(codSMS);
+		return numcodSMS;
 	}
 
 }

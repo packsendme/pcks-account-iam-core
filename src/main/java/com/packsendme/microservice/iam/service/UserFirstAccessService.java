@@ -1,11 +1,19 @@
 package com.packsendme.microservice.iam.service;
 
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.common.constants.HttpExceptionPackSend;
@@ -15,10 +23,12 @@ import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.component.SMSCodeManagement;
 import com.packsendme.microservice.iam.controller.AccountClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
+import com.packsendme.microservice.iam.dto.SMSDto;
 import com.packsendme.microservice.iam.repository.UserModel;
 
 @Service
 @ComponentScan("com.packsendme.lib.utility")
+@CacheConfig(cacheNames={"SMS"})
 public class UserFirstAccessService {
 
 	@Autowired
@@ -33,18 +43,25 @@ public class UserFirstAccessService {
 	@Autowired
 	ConvertFormat formatObj;
 	
+	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
+
 	
 	public ResponseEntity<?> findUserToFirstAccess(String username, String dtAction) {
 		UserModel userFind = new UserModel();
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.REGISTER_USERNAME.getAction(), userFind);
+		userFind.setUsername(username);
+		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USERNAME_VALIDATE_ACCESS.getAction(), userFind);
 		try{
-			userFind.setUsername(username);
 			userFind = userDAO.find(userFind);
-			
-			// FirstAccess: User does not exist in user base that create User Access Register
+			// FirstAccess: User does not exist in user base that generator SMSCode
 			if(userFind == null) {
-				userFind = createUserFirstAccess(username, dtAction);
-				return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
+				long smsCode = smsObj.generateSMSCode();
+				SMSDto smsObj = createSMSUserFirstAccess(smsCode,username);
+				if(smsObj != null) {
+					Response<SMSDto> responseSMS = new Response<SMSDto>(HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), smsObj);
+					return new ResponseEntity<>(responseSMS, HttpStatus.OK);
+				}
+				else
+					return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);		
 			}
 			// User already exists in the database not first User Access go to Login
 			else {
@@ -57,51 +74,84 @@ public class UserFirstAccessService {
 		}
 	}
 	
-	private UserModel createUserFirstAccess(String username, String dtAction) throws Exception {
-		UserModel entity = new UserModel();
-		// Generate SMSCode to validate
-		String smsCode = smsObj.generateSMSCode();
-		//Convert Date from String to Date
-		Date dtNow = formatObj.convertStringToDate(dtAction);
-		entity = new UserModel(username, "#######", MicroservicesConstants.USERNAME_ACCOUNT_DISABLED, smsCode, false, dtNow, null);
-		return userDAO.add(entity);
+	@Cacheable(value="SMS", key="#username")    
+	private SMSDto createSMSUserFirstAccess(Long smsCode, String username) throws Exception {
+		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
+		try{
+            Thread.sleep(3000); 
+        }catch(Exception e){
+        }
+		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
+		SMSDto smsObj = storeSMS.get(username);
 		// CALL METHOD SEND SMS TO CLIENT //
+		return smsObj;
 	}
 	
-	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, String smscode) throws Exception {
+	@Cacheable(value="SMS", key="#username")    
+	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, Long smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
-		UserModel entity = new UserModel(); 
-		entity.setUsername(username);
-		entity.setActivationKey(smscode);
-		entity = userDAO.find(entity);
-		
-		if(entity != null) {
-			return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+		try{
+			 Thread.sleep(3000); 
+	     }catch(Exception e){
+	 		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+
+		SMSDto smsObj = storeSMS.get(username);
+		if(smsObj != null) {
+			if(smsObj.getUsername() == username && smsObj.getSmsCode() == smscode) {
+				evict(smsObj.getUsername());
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+			}
+			else {
+				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+			}
 		}
 		else{
 			return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 		}
 	}
 	
-	// Method Call (AccountService) After register Account to enable User Access
-	public ResponseEntity<?> enableFirstUserAccess(String username, String password) {
-		UserModel entity = new UserModel(username, null, false, null, false, null, null);
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED.getAction(), null);
-		System.out.println(" enableFirstUserAccess "+ username +" "+password);
-		try {
-			entity = userDAO.find(entity);
-			if(entity != null) {
-				System.out.println(" enableFirstUserAccess entity "+ username +" "+password);
+	   
+    @Scheduled(cron = "0 * * ? * *")
+    public void checkCacheDelete(){
+		Timestamp timestampCache = new Timestamp(System.currentTimeMillis());
+		
+        System.out.println("checkCacheDelete...HOURS :: "+ timestampCache.getHours());
+    	System.out.println("checkCacheDelete...MINUTES :: "+ timestampCache.getMinutes());
+		
+    	Iterator<Map.Entry<String, SMSDto>> itr = storeSMS.entrySet().iterator();
+    	while(itr.hasNext())
+    	{
+    	   Map.Entry<String, SMSDto> entry = itr.next();
+    	   SMSDto smsObj = entry.getValue();
+    	   
+    	   long milliseconds = timestampCache.getTime() - smsObj.getTimeCreate();
+       	   int seconds = (int) milliseconds / 1000;
+       	   int minutes = (seconds % 3600) / 60;
+       	   System.out.println("USERNAME "+ smsObj.getUsername());
+       	   System.out.println("Minutes "+ minutes);
+       	   if(minutes >= 2) {
+       		   evict(smsObj.getUsername());
+       		   itr.remove();
+       	   }
+    	}
+    }
 
-				entity.setPassword(password);
-				entity.setActivated(MicroservicesConstants.USERNAME_ACCOUNT_ACTIVE);
-				entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY);
-				entity = userDAO.update(entity);
-				return new ResponseEntity<>(responseObj, HttpStatus.OK);
-			}
-			else {
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
-			}
+    @CacheEvict(key="#username") 
+    public void evict(String username){
+        System.out.println("DELETE..."+ username);
+    }
+
+	
+	// Method Call (AccountService) After register Account to enable User Access
+	public ResponseEntity<?> enableFirstUserAccess(String username, String password, String dtAction) {
+		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED.getAction(), null);
+		try {
+			Date dtCreation = formatObj.convertStringToDate(dtAction);
+			UserModel entity = new UserModel(username, password, MicroservicesConstants.USERNAME_ACCOUNT_ACTIVE,
+			MicroservicesConstants.ACTIVATIONKEY,false,dtCreation,null);
+			entity = userDAO.add(entity);
+			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 		catch (Exception e) {
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);

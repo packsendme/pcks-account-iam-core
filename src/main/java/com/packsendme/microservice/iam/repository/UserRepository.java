@@ -10,7 +10,7 @@ public interface UserRepository extends MongoRepository<UserModel, String> {
 	public UserModel findUserByUsername(String username);
 	
     @Query("{'username' : ?0, activationKey : {$eq: ?1}}")
-	public UserModel findUserByUsernameAndSMSCode(String username, String smsCode);
+	public UserModel findUserByUsernameAndSMSCode(String username, Long smsCode);
 	
     @Query("{'username' : ?0, 'activated' : true, password : {$eq: ?1}}")
 	public UserModel findUserByLogin(String username, String status);
