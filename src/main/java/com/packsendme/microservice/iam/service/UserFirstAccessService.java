@@ -108,12 +108,13 @@ public class UserFirstAccessService {
 
 			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
 		    	System.out.println("findSMSCodeUserToFirstAccess...:: OK :: ");
-				evict(smsObj.getUsername());
+		    	storeSMS.remove(username);
+		    	evict(smsObj.getUsername());
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 			else {
 		    	System.out.println("findSMSCodeUserToFirstAccess...:: NOTFOUND :: ");
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+		    	return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
 		else{
