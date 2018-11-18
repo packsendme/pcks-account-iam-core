@@ -19,7 +19,7 @@ public class UserModel implements Serializable {
 	private String username;
     private String password;
     private boolean activated;
-    private String activationKey;
+    private Long activationKey;
     private boolean resetPasswordKey;
     private Date dtCreation;
     private Date dtUpdate;
@@ -28,7 +28,7 @@ public class UserModel implements Serializable {
     public UserModel() {
 	}
 
-	public UserModel(String username, String password, boolean activated, String activationKey,
+	public UserModel(String username, String password, boolean activated, Long activationKey,
 			boolean resetPasswordKey,Date dtCreation,Date dtUpdate) {
 		super();
 		this.username = username;
@@ -64,11 +64,11 @@ public class UserModel implements Serializable {
 		this.activated = activated;
 	}
 
-	public String getActivationKey() {
+	public Long getActivationKey() {
 		return activationKey;
 	}
 
-	public void setActivationKey(String activationKey) {
+	public void setActivationKey(Long activationKey) {
 		this.activationKey = activationKey;
 	}
 
