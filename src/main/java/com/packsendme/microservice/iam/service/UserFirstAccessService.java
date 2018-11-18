@@ -89,7 +89,7 @@ public class UserFirstAccessService {
 	}
 	
 	@Cacheable(value="SMS", key="#username")    
-	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, Long smscode) throws Exception {
+	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, long smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		try{
 			 Thread.sleep(3000); 
@@ -106,7 +106,8 @@ public class UserFirstAccessService {
 	    	System.out.println("findSMSCodeUserToFirstAccess...:: getSmsCode :: "+ smsObj.getSmsCode());
 	    	System.out.println("findSMSCodeUserToFirstAccess...:: smscode :: "+ smscode);
 
-			if(smsObj.getUsername() == username && smsObj.getSmsCode() == smscode) {
+			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode() == smscode) {
+		    	System.out.println("findSMSCodeUserToFirstAccess...:: OK :: ");
 				evict(smsObj.getUsername());
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}

@@ -33,7 +33,7 @@ public class UserController {
 	}
 
 	@GetMapping("/iam/identity/sms/{username}/{smscode}")
-	public ResponseEntity<?> validateSMSCodeFirstUserAccess(@Validated @PathVariable("username") String username, @Validated @PathVariable("smscode") Long smscode) throws Exception {
+	public ResponseEntity<?> validateSMSCodeFirstUserAccess(@Validated @PathVariable("username") String username, @Validated @PathVariable("smscode") long smscode) throws Exception {
 		return firstAccessService.findSMSCodeUserToFirstAccess(username,smscode);
 	}
 	
