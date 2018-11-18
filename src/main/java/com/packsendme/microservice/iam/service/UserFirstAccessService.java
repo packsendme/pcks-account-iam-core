@@ -54,7 +54,7 @@ public class UserFirstAccessService {
 			userFind = userDAO.find(userFind);
 			// FirstAccess: User does not exist in user base that generator SMSCode
 			if(userFind == null) {
-				long smsCode = smsObj.generateSMSCode();
+				String smsCode = smsObj.generateSMSCode();
 				SMSDto smsObj = createSMSUserFirstAccess(smsCode,username);
 				if(smsObj != null) {
 					Response<SMSDto> responseSMS = new Response<SMSDto>(HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), smsObj);
@@ -75,7 +75,7 @@ public class UserFirstAccessService {
 	}
 	
 	@Cacheable(value="SMS", key="#username")    
-	private SMSDto createSMSUserFirstAccess(Long smsCode, String username) throws Exception {
+	private SMSDto createSMSUserFirstAccess(String smsCode, String username) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		try{
             Thread.sleep(3000); 
@@ -89,7 +89,7 @@ public class UserFirstAccessService {
 	}
 	
 	@Cacheable(value="SMS", key="#username")    
-	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, long smscode) throws Exception {
+	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, String smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		try{
 			 Thread.sleep(3000); 
@@ -106,7 +106,7 @@ public class UserFirstAccessService {
 	    	System.out.println("findSMSCodeUserToFirstAccess...:: getSmsCode :: "+ smsObj.getSmsCode());
 	    	System.out.println("findSMSCodeUserToFirstAccess...:: smscode :: "+ smscode);
 
-			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode() == smscode) {
+			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
 		    	System.out.println("findSMSCodeUserToFirstAccess...:: OK :: ");
 				evict(smsObj.getUsername());
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);

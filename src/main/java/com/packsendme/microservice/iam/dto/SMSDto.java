@@ -9,25 +9,25 @@ public class SMSDto implements Serializable  {
 	 */
 	private static final long serialVersionUID = -3844970754786153763L;
 
-	private long smsCode;
+	private String smsCode;
 	private String username;
 	private long timeCreate;
 	
 	
 	
 
-	public SMSDto(long smsCode, String username, long timeCreate) {
+	public SMSDto(String smsCode, String username, long timeCreate) {
 		super();
 		this.smsCode = smsCode;
 		this.username = username;
 		this.timeCreate = timeCreate;
 	}
 
-	public long getSmsCode() {
+	public String getSmsCode() {
 		return smsCode;
 	}
 
-	public void setSmsCode(long smsCode) {
+	public void setSmsCode(String smsCode) {
 		this.smsCode = smsCode;
 	}
 

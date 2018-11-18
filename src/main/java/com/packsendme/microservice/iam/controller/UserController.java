@@ -33,12 +33,13 @@ public class UserController {
 	}
 
 	@GetMapping("/iam/identity/sms/{username}/{smscode}")
-	public ResponseEntity<?> validateSMSCodeFirstUserAccess(@Validated @PathVariable("username") String username, @Validated @PathVariable("smscode") long smscode) throws Exception {
+	public ResponseEntity<?> validateSMSCodeFirstUserAccess(@Validated @PathVariable("username") String username, 
+			@Validated @PathVariable("smscode") String smscode) throws Exception {
 		return firstAccessService.findSMSCodeUserToFirstAccess(username,smscode);
 	}
 	
 	
-	@PutMapping("/iam/access/{username}/{password}")
+	@PutMapping("/iam/access/{username}/{password}/{dtAction}")
 	public ResponseEntity<?> allowsFirstUserAccess(@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("password") String password,
 			@Validated @PathVariable ("dtAction") String dtAction) throws Exception {
@@ -67,7 +68,7 @@ public class UserController {
 
  	@PutMapping("/iam/manager/{username}/{usernamenew}/{smscode}/{dtAction}")
 	public ResponseEntity<?> changeUsernameToUser(@Validated @PathVariable("username") String username, @PathVariable("usernamenew") String usernamenew,
-			@Validated @PathVariable("smscode") Long smscode,@Validated @PathVariable("dtAction") String dtAction) {
+			@Validated @PathVariable("smscode") String smscode,@Validated @PathVariable("dtAction") String dtAction) {
 		return userService.updateUserByUsernamenew(username,usernamenew,smscode,dtAction);
 	}
 
