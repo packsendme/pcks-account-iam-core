@@ -156,14 +156,14 @@ public class UserFirstAccessService {
 
 	
 	// Method Call (AccountService) After register Account to enable User Access
-	public ResponseEntity<?> enableFirstUserAccess(String username, String password, String dtAction) {
+	public ResponseEntity<?> registerUser(String username, String password, String dtAction) {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED.getAction(), null);
 		try {
 			Date dtCreation = formatObj.convertStringToDate(dtAction);
 			UserModel entity = new UserModel(username, password, MicroservicesConstants.USERNAME_ACCOUNT_ACTIVE,
 			MicroservicesConstants.ACTIVATIONKEY,false,dtCreation,null);
 			entity = userDAO.add(entity);
-			return new ResponseEntity<>(responseObj, HttpStatus.OK);
+			return new ResponseEntity<>(responseObj, HttpStatus.ACCEPTED);
 		}
 		catch (Exception e) {
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
