@@ -38,7 +38,7 @@ public class UserController {
 	}
 	
 	
-	@PutMapping("/iam/access/{username}/{password}")
+	@PutMapping("/iam/access/{username}/{password}/{dtAction}")
 	public ResponseEntity<?> allowsFirstUserAccess(@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("password") String password,
 			@Validated @PathVariable ("dtAction") String dtAction) throws Exception {
