@@ -69,7 +69,7 @@ public class UserService {
 				entity = userDAO.find(entity);
 				if(entity != null) {
 					// Generate SMSCode to validate
-					long smsCode = smsObj.generateSMSCode();
+					String smsCode = smsObj.generateSMSCode();
 					entity.setActivationKey(smsCode);
 					userDAO.update(entity);
 					// CALL SMS SEND MOBILE
@@ -90,7 +90,7 @@ public class UserService {
 		}
 	}
 	
-	public ResponseEntity<?> updateUserByUsernamenew(String username, String usernameNew, Long smscode, String dtAction) {
+	public ResponseEntity<?> updateUserByUsernamenew(String username, String usernameNew, String smscode, String dtAction) {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		UserModel entityFind = new UserModel();
 		entityFind.setUsername(username);
@@ -185,7 +185,7 @@ public class UserService {
 	}
 	
 		
-	public boolean findUserBySMSCodeUsername(String username, Long sms) throws Exception {
+	public boolean findUserBySMSCodeUsername(String username, String sms) throws Exception {
 			UserModel entity = new UserModel(); 
 			entity.setUsername(username);
 			entity.setActivationKey(sms);
