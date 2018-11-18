@@ -81,6 +81,7 @@ public class UserFirstAccessService {
             Thread.sleep(3000); 
         }catch(Exception e){
         }
+		System.out.println("SMS CODE "+ smsCode);
 		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
 		SMSDto smsObj = storeSMS.get(username);
 		// CALL METHOD SEND SMS TO CLIENT //
@@ -95,7 +96,7 @@ public class UserFirstAccessService {
 	     }catch(Exception e){
 	 		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
-
+    	System.out.println("findSMSCodeUserToFirstAccess...:: smscode :: "+ smscode);
 		SMSDto smsObj = storeSMS.get(username);
 		if(smsObj != null) {
 			if(smsObj.getUsername() == username && smsObj.getSmsCode() == smscode) {
