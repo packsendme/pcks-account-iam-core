@@ -39,7 +39,7 @@ public class UserController {
 	}
 	
 	
-	@PostMapping("/iam/identity/{username}/{password}/{dtAction}")
+	@PutMapping("/iam/identity/{username}/{password}/{dtAction}")
 	public ResponseEntity<?> createUser(@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("password") String password,
 			@Validated @PathVariable ("dtAction") String dtAction) throws Exception {
