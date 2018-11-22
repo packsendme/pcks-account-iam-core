@@ -78,7 +78,7 @@ public class UserFirstAccessService {
 	private SMSDto createSMSUserFirstAccess(String smsCode, String username) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		try{
-            Thread.sleep(3000); 
+            Thread.sleep(1000); 
         }catch(Exception e){
         }
 		System.out.println("SMS CODE "+ smsCode);
@@ -92,7 +92,7 @@ public class UserFirstAccessService {
 	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, String smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		try{
-			 Thread.sleep(3000); 
+			 Thread.sleep(1000); 
 	     }catch(Exception e){
 	 		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
@@ -142,7 +142,7 @@ public class UserFirstAccessService {
        	   int minutes = (seconds % 3600) / 60;
        	   System.out.println("USERNAME "+ smsObj.getUsername());
        	   System.out.println("Minutes "+ minutes);
-       	   if(minutes >= 2) {
+       	   if(minutes >= 1) {
        		   evict(smsObj.getUsername());
        		   itr.remove();
        	   }
