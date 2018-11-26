@@ -105,30 +105,30 @@ public class UserFirstAccessService {
 	     }catch(Exception e){
 	 		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
-    	System.out.println("findSMSCodeUserToFirstAccess...:: smscode :: "+ smscode);
+    	System.out.println("-----------------------------------------------------------");
+		
+    	System.out.println("find...:: USERNAME :: "+ username);
+		System.out.println("find...:: SMS :: "+ smscode);
+		
 		SMSDto smsObj = storeSMS.get(username);
 		if(smsObj != null) {
-
-	    	System.out.println("findSMSCodeUserToFirstAccess...:: getUsername :: "+ smsObj.getUsername());
-	    	System.out.println("findSMSCodeUserToFirstAccess...:: Username :: "+ username);
-
-	    	System.out.println("findSMSCodeUserToFirstAccess...:: getSmsCode :: "+ smsObj.getSmsCode());
-	    	System.out.println("findSMSCodeUserToFirstAccess...:: smscode :: "+ smscode);
-
 			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
-		    	System.out.println("findSMSCodeUserToFirstAccess...:: OK :: ");
+		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(username));
 		    	storeSMS.remove(username);
 		    	evict(smsObj.getUsername());
-				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		    	return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 			else {
-		    	System.out.println("findSMSCodeUserToFirstAccess...:: NOTFOUND :: ");
-		    	return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				System.out.println("find...:: NOT-FOUND:: ");
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
 		else{
-	    	System.out.println("findSMSCodeUserToFirstAccess...:: NOTFOUND smsObj :: ");
-			return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+	    	System.out.println("find...:: NOT-FOUND:: ");
+	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	    	return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 		}
 	}
 	
