@@ -55,7 +55,7 @@ public class UserFirstAccessService {
 			// FirstAccess: User does not exist in user base that generator SMSCode
 			if(userFind == null) {
 				String smsCode = smsObj.generateSMSCode();
-				SMSDto smsObj = createSMSUserFirstAccess(smsCode,username);
+				SMSDto smsObj = createSMSUserFirstAccess(username,smsCode);
 				if(smsObj != null) {
 					Response<SMSDto> responseSMS = new Response<SMSDto>(HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), smsObj);
 					return new ResponseEntity<>(responseSMS, HttpStatus.OK);
@@ -77,7 +77,7 @@ public class UserFirstAccessService {
 	@Cacheable(key="#username,#smsCode")    
 	private SMSDto createSMSUserFirstAccess(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
-		System.out.println("-----------------------------------------"+ smsCode);
+		System.out.println("-----------------------------------------");
 		System.out.println("createSMSUserFirstAccess"+ username +" - "+ smsCode);
 
 		SMSDto smsObj = null;
@@ -85,16 +85,19 @@ public class UserFirstAccessService {
             Thread.sleep(1000); 
         }catch(Exception e){
         }
-		System.out.println("SMS CODE "+ smsCode);
 		
 		smsObj = storeSMS.get(username);
 		if(smsObj != null) {
-			System.out.println("find...:: OK :: ");
+			System.out.println("find... :: "+ username);
 			storeSMS.remove(username);
 			evict(smsObj.getUsername());
 		}
 		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
 		smsObj = storeSMS.get(username);
+		System.out.println("SMSCreate ...:: OK :: "+ username);
+		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+
+
 		// CALL METHOD SEND SMS TO CLIENT //
 		return smsObj;
 	}
