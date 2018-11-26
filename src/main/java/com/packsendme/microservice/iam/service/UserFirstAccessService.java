@@ -74,7 +74,7 @@ public class UserFirstAccessService {
 		}
 	}
 	
-	@Cacheable(value="SMS", key="#username")    
+	@Cacheable(value="SMS")    
 	private SMSDto createSMSUserFirstAccess(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -102,7 +102,7 @@ public class UserFirstAccessService {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMS", key="#username")    
+	@Cacheable(value="SMS")    
 	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, String smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		try{
@@ -163,7 +163,7 @@ public class UserFirstAccessService {
     	}
     }
 
-    @CacheEvict(value="SMS", key="#username") 
+    @CacheEvict(value="SMS") 
     public void evict(String username){
         System.out.println("DELETE..."+ username);
     }
