@@ -74,7 +74,7 @@ public class UserFirstAccessService {
 		}
 	}
 	
-	@Cacheable(value="SMS", key="#username")    
+	@Cacheable(value="SMS", key="#username,#smsCode")    
 	private SMSDto createSMSUserFirstAccess(String smsCode, String username) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		SMSDto smsObj = null;
@@ -97,7 +97,7 @@ public class UserFirstAccessService {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMS", key="#username")    
+	@Cacheable(value="SMS", key="#username,#smscode")    
 	public ResponseEntity<?> findSMSCodeUserToFirstAccess(String username, String smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		try{
