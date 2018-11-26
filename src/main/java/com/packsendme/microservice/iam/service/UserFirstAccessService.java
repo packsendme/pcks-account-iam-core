@@ -74,7 +74,7 @@ public class UserFirstAccessService {
 		}
 	}
 	
-	@Cacheable(value="SMS", key="#username,#smsCode")    
+	@Cacheable(value="SMS", key="#username")    
 	private SMSDto createSMSUserFirstAccess(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -163,7 +163,7 @@ public class UserFirstAccessService {
     	}
     }
 
-    @CacheEvict(key="#username") 
+    @CacheEvict(value="SMS", key="#username") 
     public void evict(String username){
         System.out.println("DELETE..."+ username);
     }
