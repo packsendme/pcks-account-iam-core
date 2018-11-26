@@ -77,13 +77,22 @@ public class UserFirstAccessService {
 	@Cacheable(value="SMS", key="#username")    
 	private SMSDto createSMSUserFirstAccess(String smsCode, String username) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
+		SMSDto smsObj = null;
 		try{
             Thread.sleep(1000); 
         }catch(Exception e){
         }
 		System.out.println("SMS CODE "+ smsCode);
-		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
-		SMSDto smsObj = storeSMS.get(username);
+		
+		smsObj = storeSMS.get(username);
+		if(smsObj != null) {
+	    	System.out.println("findSMSCodeUserToFirstAccess...:: OK :: ");
+	    	storeSMS.remove(username);
+	    	evict(smsObj.getUsername());
+		}else{
+			storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
+			smsObj = storeSMS.get(username);
+		}
 		// CALL METHOD SEND SMS TO CLIENT //
 		return smsObj;
 	}
