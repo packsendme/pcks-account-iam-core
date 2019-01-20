@@ -42,6 +42,7 @@ public class UserService {
 			entity.setPassword(password);
 			entity = userDAO.find(entity);
 			if(entity != null) {
+				responseObj = new Response<UserModel>(HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 			else {
