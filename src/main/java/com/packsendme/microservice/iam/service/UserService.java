@@ -102,7 +102,7 @@ public class UserService {
 				if(entity != null) {
 					entity.setUsername(usernameNew);
 					entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY);
-					entity.setDtUpdate(formatObj.convertStringToDate(dtAction));
+					entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
 					userDAO.update(entity);
 					// Call AccountMicroservice - Update Username - Account
 					ResponseEntity<?> opResultAccount = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
@@ -112,7 +112,7 @@ public class UserService {
 					// Erro AccountService - Compensaçao de resultado
 					else {
 						entity.setUsername(username);
-						entity.setDtUpdate(formatObj.convertStringToDate(dtAction));
+						entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
 						userDAO.update(entity);
 						return new ResponseEntity<>(responseObj, HttpStatus.FORBIDDEN);
 					}
@@ -146,7 +146,7 @@ public class UserService {
 			
 			if(entity != null) {
 				entity.setPassword(password);
-				entity.setDtUpdate(formatObj.convertStringToDate(dtAction));
+				entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
 				userDAO.update(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
@@ -171,7 +171,7 @@ public class UserService {
 
 			if(entity != null) {
 				entity.setActivated(MicroservicesConstants.USERNAME_ACCOUNT_DISABLED);
-				entity.setDtUpdate(dtNow);
+				entity.setDateUpdate(dtNow);
 				userDAO.update(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
