@@ -12,7 +12,7 @@ import com.packsendme.lib.common.constants.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
 import com.packsendme.lib.utility.ConvertFormat;
-import com.packsendme.microservice.iam.component.SMSCodeManagement;
+import com.packsendme.microservice.iam.component.SMSCode;
 import com.packsendme.microservice.iam.controller.AccountClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
 import com.packsendme.microservice.iam.repository.UserModel;
@@ -26,9 +26,10 @@ public class UserService {
 	
 	@Autowired
 	AccountClient accountCliente;
-	
+
 	@Autowired
-	SMSCodeManagement smsObj;
+	SMSCode smsObj;
+	
 	
 	@Autowired
 	ConvertFormat formatObj;
@@ -56,49 +57,17 @@ public class UserService {
 	}
 
 	
-	public ResponseEntity<?> checkUsernameForChange(String username, String usernamenew) {
-		UserModel userFind = new UserModel();
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.REGISTER_USERNAME.getAction(), userFind);
-		try{
-			userFind.setUsername(usernamenew);
-			userFind = userDAO.find(userFind);
-			
-			// Username does exist in user base can be change for usernameNew
-			if(userFind == null) {
-				UserModel entity = new UserModel();
-				entity.setUsername(username);
-				entity = userDAO.find(entity);
-				if(entity != null) {
-					// Generate SMSCode to validate
-					String smsCode = smsObj.generateSMSCode();
-					entity.setActivationKey(smsCode);
-					userDAO.update(entity);
-					// CALL SMS SEND MOBILE
-					return new ResponseEntity<>(responseObj, HttpStatus.OK);
-				}
-				else {
-					return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
-				}
-			}
-			// User already exists in the database 
-			else {
-				return new ResponseEntity<>(responseObj,HttpStatus.FOUND);
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);		
-		}
-	}
 	
-	public ResponseEntity<?> updateUserByUsernamenew(String username, String usernameNew, String smscode, String dtAction) {
+	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smscode, String dtAction) {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		UserModel entityFind = new UserModel();
 		entityFind.setUsername(username);
 		try {
-			if(findUserBySMSCodeUsername(username,smscode) == MicroservicesConstants.SMS_VALIDATE_FOUND) {
+			
+			boolean result =  smsObj.findSMSCodeUser(usernameNew, smscode);
+			
+			if(result == true){
 				UserModel entity = userDAO.find(entityFind);
-
 				if(entity != null) {
 					entity.setUsername(usernameNew);
 					entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY);
@@ -158,6 +127,7 @@ public class UserService {
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	
 	public ResponseEntity<?> cancelUserAccessByUsername(String username, String dtAction) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.CANCEL_USERNAME.getAction(), null);
