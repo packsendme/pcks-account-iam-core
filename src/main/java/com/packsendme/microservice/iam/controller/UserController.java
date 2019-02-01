@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +20,7 @@ public class UserController {
 	
 	@Autowired
 	private UserFirstAccessService firstAccessService;
-	
+
 
 	//** BEGIN OPERATION: USER FIRST ACCESS *************************************************//
 	
@@ -35,7 +34,7 @@ public class UserController {
 	@GetMapping("/iam/identity/sms/{username}/{smscode}")
 	public ResponseEntity<?> validateSMSCodeFirstUserAccess(@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("smscode") String smscode) throws Exception {
-		return firstAccessService.findSMSCodeUserToFirstAccess(username,smscode);
+		return firstAccessService.findSMSCodeToFirstAccess(username,smscode);
 	}
 	
 	
@@ -54,24 +53,21 @@ public class UserController {
 	
 	//** BEGIN OPERATION CRUD *************************************************//
 	
+ 	
  	@DeleteMapping("/iam/manager/{username}/{dtAction}")
 	public ResponseEntity<?> cancelAccountUserAccess(@Validated @PathVariable("username") String username,
 			@Validated @PathVariable("dtAction") String dtAction) throws Exception {
 			return userService.cancelUserAccessByUsername(username,dtAction);
 	}
 	
- 	@PutMapping("/iam/manager/{username}/{usernamenew}")
-	public ResponseEntity<?> validateChangeUsernameToUser(@Validated @PathVariable("username") String username, 
-			@PathVariable("usernamenew") String usernamenew) {
-		return userService.checkUsernameForChange(username,usernamenew);
+ 	@GetMapping("/iam/manager/{username}/{usernamenew}/{smscode}/{dtAction}")
+	public ResponseEntity<?> validateSMSCodeToUpdateUser(@Validated @PathVariable("username") String username, 
+			@PathVariable("usernamenew") String usernamenew,@PathVariable("smscode") String smscode,
+			@PathVariable("dtAction") String dtAction) {
+			return userService.getSMSCodeToUpdateUser(username, usernamenew, smscode, dtAction);
 	}
 
- 	@PutMapping("/iam/manager/{username}/{usernamenew}/{smscode}/{dtAction}")
-	public ResponseEntity<?> changeUsernameToUser(@Validated @PathVariable("username") String username, @PathVariable("usernamenew") String usernamenew,
-			@Validated @PathVariable("smscode") String smscode,@Validated @PathVariable("dtAction") String dtAction) {
-		return userService.updateUserByUsernamenew(username,usernamenew,smscode,dtAction);
-	}
-
+ 
  	@PutMapping("/iam/manager/{username}/{password}/{dtAction}")
 	public ResponseEntity<?> changePasswordToUser(@Validated @PathVariable("username") String username,
 			@Validated @PathVariable("password") String password,

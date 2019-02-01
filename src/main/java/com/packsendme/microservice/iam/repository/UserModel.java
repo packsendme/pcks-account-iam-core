@@ -21,23 +21,22 @@ public class UserModel implements Serializable {
     private boolean activated;
     private String activationKey;
     private boolean resetPasswordKey;
-    private Date dtCreation;
-    private Date dtUpdate;
+    private Date dateCreation;
+    private Date dateUpdate;
     
     
     public UserModel() {
 	}
 
 	public UserModel(String username, String password, boolean activated, String activationKey,
-			boolean resetPasswordKey,Date dtCreation,Date dtUpdate) {
+			boolean resetPasswordKey,Date dtCreation) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.activated = activated;
 		this.activationKey = activationKey;
 		this.resetPasswordKey = resetPasswordKey;
-		this.setDtCreation(dtCreation);
-		this.setDtUpdate(dtUpdate);
+		this.dateCreation = dateCreation;
 	}
 
 	public String getUsername() {
@@ -88,20 +87,20 @@ public class UserModel implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDtCreation() {
-		return dtCreation;
+	public Date getDateCreation() {
+		return dateCreation;
 	}
 
-	public void setDtCreation(Date dtCreation) {
-		this.dtCreation = dtCreation;
+	public void setDateCreation(Date dateCreation) {
+		this.dateCreation = dateCreation;
 	}
 
-	public Date getDtUpdate() {
-		return dtUpdate;
+	public Date getDateUpdate() {
+		return dateUpdate;
 	}
 
-	public void setDtUpdate(Date dtUpdate) {
-		this.dtUpdate = dtUpdate;
+	public void setDateUpdate(Date dateUpdate) {
+		this.dateUpdate = dateUpdate;
 	}
 
 }
