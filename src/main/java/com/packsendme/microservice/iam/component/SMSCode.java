@@ -14,14 +14,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.dto.SMSDto;
 
 
 //@ComponentScan("com.packsendme.lib.utility")
-@Component
+@Service
 @ComponentScan("com.packsendme.microservice.iam.component")
 @CacheConfig(cacheNames={"SMS"})
 public class SMSCode {
