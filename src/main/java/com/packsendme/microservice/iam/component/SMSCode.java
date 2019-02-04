@@ -63,14 +63,15 @@ public class SMSCode {
 	@Cacheable(value="SMS")    
 	public boolean findSMSCodeUser(String username, String smscode) throws Exception {
 		try{
-			 Thread.sleep(1000); 
+	    	System.out.println("-----------------------------------------------------------");
+	    	System.out.println("find...:: USERNAME :: "+ username);
+			System.out.println("find...:: SMS :: "+ smscode);
+	    	System.out.println("-----------------------------------------------------------");
+			Thread.sleep(1000); 
 	     }catch(Exception e){
+		    System.out.println("------------------------E R R O R-----------------------------------");
 	 		return false;
 	    }
-    	System.out.println("-----------------------------------------------------------");
-		
-    	System.out.println("find...:: USERNAME :: "+ username);
-		System.out.println("find...:: SMS :: "+ smscode);
 		
 		SMSDto smsObj = storeSMS.get(username);
 		if(smsObj != null) {
