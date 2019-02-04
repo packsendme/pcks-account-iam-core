@@ -76,10 +76,7 @@ public class UserFirstAccessService {
 	
 	public ResponseEntity<?> findSMSCodeToFirstAccess(String username, String smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
-		
-    	System.out.println("find...:: USERNAME :: "+ username);
-		System.out.println("find...:: SMS :: "+ smscode);
-		
+			
 		try {
 			boolean result = smsObj.findSMSCodeUser(username,smscode);
 			if(result == true) {
@@ -90,6 +87,7 @@ public class UserFirstAccessService {
 			}
 		}
 		catch (Exception e) {
+			System.out.println("EXCEPTION ERROR"+ e);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
