@@ -76,10 +76,11 @@ public class UserFirstAccessService {
 	
 	public ResponseEntity<?> findSMSCodeToFirstAccess(String username, String smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
-			
+		SMSDto smsDto = new SMSDto();
+
 		try {
-			boolean result = smsObj.findSMSCodeUser(username,smscode);
-			if(result == true) {
+			smsDto = smsObj.findSMSCodeUser(username,smscode);
+			if(smsObj != null) {
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 			else {
