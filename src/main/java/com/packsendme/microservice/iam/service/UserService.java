@@ -15,6 +15,7 @@ import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.component.SMSCode;
 import com.packsendme.microservice.iam.controller.AccountClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
+import com.packsendme.microservice.iam.dto.SMSDto;
 import com.packsendme.microservice.iam.repository.UserModel;
 
 @Service
@@ -61,12 +62,14 @@ public class UserService {
 	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smscode, String dtAction) {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		UserModel entityFind = new UserModel();
+		SMSDto smsDto = new SMSDto();
+		
 		entityFind.setUsername(username);
 		try {
 			
-			boolean result =  smsObj.findSMSCodeUser(usernameNew, smscode);
+			smsDto =  smsObj.findSMSCodeUser(usernameNew, smscode);
 			
-			if(result == true){
+			if(smsDto != null){
 				UserModel entity = userDAO.find(entityFind);
 				if(entity != null) {
 					entity.setUsername(usernameNew);

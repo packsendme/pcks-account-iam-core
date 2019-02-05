@@ -14,7 +14,9 @@ public class SMSDto implements Serializable  {
 	private long timeCreate;
 	
 	
-	
+	public SMSDto() {
+		super();
+	}
 
 	public SMSDto(String smsCode, String username, long timeCreate) {
 		super();
