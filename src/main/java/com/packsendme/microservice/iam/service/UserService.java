@@ -62,7 +62,7 @@ public class UserService {
 	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smscode, String dtAction) {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		UserModel entityFind = new UserModel();
-		SMSDto smsDto = new SMSDto();
+		SMSDto smsDto = null;
 		
 		entityFind.setUsername(username);
 		try {
