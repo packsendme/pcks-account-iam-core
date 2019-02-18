@@ -86,8 +86,11 @@ public class SMSCode {
 			}
 		}
 		else{
-	    	System.out.println("find...:: NOT-FOUND:: ");
 	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("find Result Validation ...:: NOT-FOUND:: ");
+	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			smsObj = null;
+			return smsObj;
 		}
 		return smsObj;
 	}

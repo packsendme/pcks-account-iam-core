@@ -63,7 +63,6 @@ public class UserService {
 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		UserModel entityFind = new UserModel();
 		SMSDto smsDto = new SMSDto();
-		
 		entityFind.setUsername(username);
 		try {
 			
