@@ -61,33 +61,41 @@ public class SMSCode {
 	}
 	
 	@Cacheable(value="SMS")    
-	public SMSDto findSMSCodeUser(String username, String smscode) throws Exception {
+	public SMSDto findSMSCodeUser(String usernameNew, String smscode) throws Exception {
 		SMSDto smsObj = new SMSDto();
 		try{
 	    	System.out.println("-----------------------------------------------------------");
-	    	System.out.println("find...:: USERNAME :: "+ username);
+	    	System.out.println("find...:: USERNAME_NEW :: "+ usernameNew);
 			System.out.println("find...:: SMS :: "+ smscode);
 	    	System.out.println("-----------------------------------------------------------");
 			Thread.sleep(1000); 
 	     }catch(Exception e){
 		    System.out.println("------------------------E R R O R-----------------------------------");
 	    }
-		smsObj = storeSMS.get(username);
+		smsObj = storeSMS.get(usernameNew);
 		if(smsObj != null) {
-			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
-		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(username));
-		    	storeSMS.remove(username);
+			
+	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	    	System.out.println("FOUND smsObj ...:: "+ smsObj.getUsername());
+	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+			if(smsObj.getUsername().equals(usernameNew) && smsObj.getSmsCode().equals(smscode)) {
+		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(usernameNew));
+		    	storeSMS.remove(usernameNew);
 		    	evict(smsObj.getUsername());
 		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			}
 			else {
-				System.out.println("find...:: NOT-FOUND:: ");
 		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				System.out.println("Result Validation ...:: NOT-FOUND:: ");
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				smsObj = null;
+				return smsObj;			
 			}
 		}
 		else{
 	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.println("find Result Validation ...:: NOT-FOUND:: ");
+			System.out.println("Result FIND  ...:: NOT-FOUND:: ");
 	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			smsObj = null;
 			return smsObj;
