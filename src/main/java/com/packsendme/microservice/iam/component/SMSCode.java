@@ -32,7 +32,7 @@ public class SMSCode {
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
 	
-	@Cacheable(value="SMS")    
+	@Cacheable(value="SMS", key="{#root.methodName, #username, #smsCode}")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -50,7 +50,7 @@ public class SMSCode {
 		if(smsObj != null) {
 			System.out.println("find... :: "+ username);
 			storeSMS.remove(username);
-			evict(smsObj.getUsername());
+			evict(smsObj.getUsername(),smsObj.getSmsCode());
 		}
 		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
 		smsObj = storeSMS.get(username);
@@ -62,7 +62,7 @@ public class SMSCode {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMS")    
+	@Cacheable(value="SMS", key="{#root.methodName, #username, #smsCode}")    
 	public SMSDto findSMSCodeUser(String usernameNew, String smscode) throws Exception {
 		SMSDto smsObj = null;
 		try{
@@ -80,7 +80,7 @@ public class SMSCode {
 			if(smsObj.getUsername().equals(usernameNew) && smsObj.getSmsCode().equals(smscode)) {
 		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(usernameNew));
 		    	storeSMS.remove(usernameNew);
-		    	evict(smsObj.getUsername());
+		    	evict(smsObj.getUsername(),smsObj.getSmsCode());
 		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			}
 			else {
@@ -119,14 +119,14 @@ public class SMSCode {
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
-       		   evict(smsObj.getUsername());
+       		   evict(smsObj.getUsername(),smsObj.getSmsCode());
        		   itr.remove();
        	   }
     	}
     }
 
-    @CacheEvict(value="SMS",key="#username") 
-    public void evict(String username){
+    @CacheEvict(value="SMS",key="{#root.methodName, #username, #smsCode}") 
+    public void evict(String username, String smsCode){
         System.out.println("<<<< DELETE >>>>..."+ username);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
     }
