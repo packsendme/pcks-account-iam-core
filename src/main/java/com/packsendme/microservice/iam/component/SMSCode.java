@@ -48,7 +48,7 @@ public class SMSCode {
 		if(smsObj != null) {
 			System.out.println("find... :: "+ username);
 			storeSMS.remove(username);
-			evict(smsObj.getUsername());
+			evict(smsObj.getUsername(), smsObj.getSmsCode());
 		}
 		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
 		smsObj = storeSMS.get(username);
@@ -62,7 +62,7 @@ public class SMSCode {
 	
 	@Cacheable(value="SMS")    
 	public SMSDto findSMSCodeUser(String usernameNew, String smscode) throws Exception {
-		SMSDto smsObj = new SMSDto();
+		SMSDto smsObj = null;
 		try{
 	    	System.out.println("-----------------------------------------------------------");
 	    	System.out.println("find...:: USERNAME_NEW :: "+ usernameNew);
@@ -73,33 +73,6 @@ public class SMSCode {
 		    System.out.println("------------------------E R R O R-----------------------------------");
 	    }
 		smsObj = storeSMS.get(usernameNew);
-		if(smsObj != null) {
-			
-	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-	    	System.out.println("FOUND smsObj ...:: "+ smsObj.getUsername());
-	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-			if(smsObj.getUsername().equals(usernameNew) && smsObj.getSmsCode().equals(smscode)) {
-		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(usernameNew));
-		    	storeSMS.remove(usernameNew);
-		    	evict(smsObj.getUsername());
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			}
-			else {
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				System.out.println("Result Validation ...:: NOT-FOUND:: ");
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				smsObj = null;
-				return smsObj;			
-			}
-		}
-		else{
-	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.println("Result FIND  ...:: NOT-FOUND:: ");
-	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			smsObj = null;
-			return smsObj;
-		}
 		return smsObj;
 	}
 		
@@ -123,15 +96,15 @@ public class SMSCode {
        	   System.out.println("USERNAME "+ smsObj.getUsername());
        	   System.out.println("Minutes "+ minutes);
        	   if(minutes >= 1) {
-       		   evict(smsObj.getUsername());
+       		   evict(smsObj.getUsername(),smsObj.getSmsCode());
        		   itr.remove();
        	   }
     	}
     }
 
     @CacheEvict(value="SMS") 
-    public void evict(String username){
-        System.out.println("DELETE..."+ username);
+    public void evict(String username,String smsCode){
+        System.out.println("<<<< DELETE >>>>..."+ username);
     }
     
 	public String generateSMSCode() {
