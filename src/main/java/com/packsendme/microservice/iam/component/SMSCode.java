@@ -32,11 +32,13 @@ public class SMSCode {
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
 	
-	@Cacheable(value="SMS")    
+	@Cacheable(value="SMS",key="#username")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
-		System.out.println("createSMSUserFirstAccess"+ username +" - "+ smsCode);
+		System.out.println("CreateCache--Username :: "+ username +" - "+ smsCode);
+        System.out.println("CreateCache-Username HOURS/MINUTES :: "+ timeCreate.getHours() +" "+timeCreate.getMinutes());
+
 
 		SMSDto smsObj = null;
 		try{
@@ -48,11 +50,11 @@ public class SMSCode {
 		if(smsObj != null) {
 			System.out.println("find... :: "+ username);
 			storeSMS.remove(username);
-			evict(smsObj.getUsername(), smsObj.getSmsCode());
+			evict(smsObj.getUsername());
 		}
 		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
 		smsObj = storeSMS.get(username);
-		System.out.println("SMSCreate ...:: OK :: "+ username);
+		System.out.println("CreateCache-Username ...:: OK :: ");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
 
 
@@ -81,9 +83,6 @@ public class SMSCode {
     public void checkCacheDelete(){
 		Timestamp timestampCache = new Timestamp(System.currentTimeMillis());
 		
-        System.out.println("checkCacheDelete...HOURS :: "+ timestampCache.getHours());
-    	System.out.println("checkCacheDelete...MINUTES :: "+ timestampCache.getMinutes());
-		
     	Iterator<Map.Entry<String, SMSDto>> itr = storeSMS.entrySet().iterator();
     	while(itr.hasNext())
     	{
@@ -93,18 +92,20 @@ public class SMSCode {
     	   long milliseconds = timestampCache.getTime() - smsObj.getTimeCreate();
        	   int seconds = (int) milliseconds / 1000;
        	   int minutes = (seconds % 3600) / 60;
-       	   System.out.println("USERNAME "+ smsObj.getUsername());
-       	   System.out.println("Minutes "+ minutes);
        	   if(minutes >= 1) {
-       		   evict(smsObj.getUsername(),smsObj.getSmsCode());
+       		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+       		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
+       		   System.out.println("checkCacheDelete-Minutes "+ minutes);
+       		   evict(smsObj.getUsername());
        		   itr.remove();
        	   }
     	}
     }
 
-    @CacheEvict(value="SMS") 
-    public void evict(String username,String smsCode){
+    @CacheEvict(value="SMS",key="#username") 
+    public void evict(String username){
         System.out.println("<<<< DELETE >>>>..."+ username);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
     }
     
 	public String generateSMSCode() {
