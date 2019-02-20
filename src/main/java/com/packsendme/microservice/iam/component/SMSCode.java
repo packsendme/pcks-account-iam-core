@@ -32,7 +32,7 @@ public class SMSCode {
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
 	
-	@Cacheable(value="SMS",key="#username")    
+	@Cacheable(value="SMS")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -75,6 +75,29 @@ public class SMSCode {
 		    System.out.println("------------------------E R R O R-----------------------------------");
 	    }
 		smsObj = storeSMS.get(usernameNew);
+		if(smsObj != null) {
+
+			if(smsObj.getUsername().equals(usernameNew) && smsObj.getSmsCode().equals(smscode)) {
+		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(usernameNew));
+		    	storeSMS.remove(usernameNew);
+		    	evict(smsObj.getUsername());
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			}
+			else {
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				System.out.println("Result Validation ...:: NOT-FOUND:: ");
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				smsObj = null;
+				return smsObj;			
+			}
+		}
+		else{
+	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			smsObj = null;
+			return smsObj;
+		}
 		return smsObj;
 	}
 		
