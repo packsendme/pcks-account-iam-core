@@ -20,7 +20,7 @@ import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.dto.SMSDto;
 
 
-//@ComponentScan("com.packsendme.lib.utility")
+@ComponentScan("com.packsendme.lib.utility")
 @Service
 @ComponentScan("com.packsendme.microservice.iam.component")
 @CacheConfig(cacheNames={"SMS"})
@@ -32,7 +32,7 @@ public class SMSCode {
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
 	
-	@Cacheable(value="SMS", key="{#root.methodName, #username, #smsCode}")    
+	@Cacheable(value="SMS", key="{#username, #smsCode}")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -62,7 +62,7 @@ public class SMSCode {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMS", key="{#root.methodName, #username, #smsCode}")    
+	@Cacheable(value="SMS", key="{#username, #smsCode}")    
 	public SMSDto findSMSCodeUser(String usernameNew, String smscode) throws Exception {
 		SMSDto smsObj = null;
 		try{
@@ -125,7 +125,7 @@ public class SMSCode {
     	}
     }
 
-    @CacheEvict(value="SMS",key="{#root.methodName, #username, #smsCode}") 
+    @CacheEvict(value="SMS",key="{#username, #smsCode}") 
     public void evict(String username, String smsCode){
         System.out.println("<<<< DELETE >>>>..."+ username);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
