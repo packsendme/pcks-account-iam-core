@@ -67,7 +67,7 @@ public class SMSCode {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMS", key="{#username, #smsCode}")    
+	@Cacheable(value="SMS", key="{#username, #smsCode}", sync=true)   
 	public SMSDto findSMSCodeUser(String username, String smscode) throws Exception {
 		SMSDto smsObj = null;
 		try{
@@ -80,6 +80,15 @@ public class SMSCode {
 		    System.out.println("------------------------E R R O R-----------------------------------");
 	    }
 		smsObj = storeSMS.get(username);
+		if(smsObj == null) {
+			System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+		}
+		else {
+			System.out.println("Result FIND  ...:: FOUND:: "+ smsObj.getUsername());
+
+		}
+		
+		/*
 		if(smsObj != null) {
 
 			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
@@ -102,7 +111,7 @@ public class SMSCode {
 	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			smsObj = null;
 			return smsObj;
-		}
+		}*/
 		return smsObj;
 	}
 		
