@@ -66,8 +66,8 @@ public class UserService {
 		entityFind.setUsername(username);
 		try {
 			
-			smsDto =  smsObj.findSMSCodeUser(usernameNew, smscode);
-			//smsDto =  smsObj.createSMSCodeUser(usernameNew, smscode);
+			//smsDto =  smsObj.findSMSCodeUser(usernameNew, smscode);
+			smsDto =  smsObj.createSMSCodeUser(usernameNew, smscode);
 			
 			if(smsDto != null){
 				UserModel entity = userDAO.find(entityFind);
