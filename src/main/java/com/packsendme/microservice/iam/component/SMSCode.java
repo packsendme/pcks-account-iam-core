@@ -32,7 +32,7 @@ public class SMSCode {
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
 	
-	@Cacheable(value="SMS", key="{#username, #smsCode}")    
+	@Cacheable(value="SMS", key="{#username, #smsCode}", sync=true)    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -42,12 +42,14 @@ public class SMSCode {
 
 		SMSDto smsObj = null;
 		try{
+			System.out.println("CreateCache-- Creating :: ");
             Thread.sleep(1000); 
         }catch(Exception e){
         }
 		
 		smsObj = storeSMS.get(username);
 		if(smsObj != null) {
+			System.out.println("Validate Cache -- NULL :: ");
 			return smsObj;
 /*
 			System.out.println("find... :: "+ username);
