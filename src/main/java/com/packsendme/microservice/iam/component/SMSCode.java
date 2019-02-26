@@ -66,23 +66,23 @@ public class SMSCode {
 	}
 	
 	@Cacheable(value="SMS", key="{#username, #smsCode}")    
-	public SMSDto findSMSCodeUser(String usernameNew, String smscode) throws Exception {
+	public SMSDto findSMSCodeUser(String username, String smscode) throws Exception {
 		SMSDto smsObj = null;
 		try{
 	    	System.out.println("-----------------------------------------------------------");
-	    	System.out.println("find...:: USERNAME_NEW :: "+ usernameNew);
+	    	System.out.println("find...:: USERNAME_NEW :: "+ username);
 			System.out.println("find...:: SMS :: "+ smscode);
 	    	System.out.println("-----------------------------------------------------------");
 			Thread.sleep(1000); 
 	     }catch(Exception e){
 		    System.out.println("------------------------E R R O R-----------------------------------");
 	    }
-		smsObj = storeSMS.get(usernameNew);
+		smsObj = storeSMS.get(username);
 		if(smsObj != null) {
 
-			if(smsObj.getUsername().equals(usernameNew) && smsObj.getSmsCode().equals(smscode)) {
-		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(usernameNew));
-		    	storeSMS.remove(usernameNew);
+			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
+		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(username));
+		    	storeSMS.remove(username);
 		    	evict(smsObj.getUsername(),smsObj.getSmsCode());
 		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			}
