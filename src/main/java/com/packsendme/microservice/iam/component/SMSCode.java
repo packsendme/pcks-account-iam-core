@@ -80,15 +80,24 @@ public class SMSCode {
 		    System.out.println("------------------------E R R O R-----------------------------------");
 	    }
 		smsObj = storeSMS.get(username);
-		if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
-			System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+		if(smsObj != null) {
+			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
+				System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+				return smsObj;
+			}
+			else {
+				smsObj = null;
+				System.out.println("Result FIND  ...:: FOUND:: "+ smsObj.getUsername());
+				return smsObj;
+			}
 		}
-		else {
-			smsObj = null;
-			System.out.println("Result FIND  ...:: FOUND:: "+ smsObj.getUsername());
-			return smsObj;
+		else{
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				smsObj = null;
+				return smsObj;
 		}
-		
 		/*
 		if(smsObj != null) {
 
@@ -113,7 +122,6 @@ public class SMSCode {
 			smsObj = null;
 			return smsObj;
 		}*/
-		return smsObj;
 	}
 		
 	   
