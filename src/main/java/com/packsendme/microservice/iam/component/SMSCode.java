@@ -80,12 +80,13 @@ public class SMSCode {
 		    System.out.println("------------------------E R R O R-----------------------------------");
 	    }
 		smsObj = storeSMS.get(username);
-		if(smsObj == null) {
+		if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
 			System.out.println("Result FIND  ...:: NOT-FOUND:: ");
 		}
 		else {
+			smsObj = null;
 			System.out.println("Result FIND  ...:: FOUND:: "+ smsObj.getUsername());
-
+			return smsObj;
 		}
 		
 		/*
