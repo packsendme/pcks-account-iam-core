@@ -48,16 +48,19 @@ public class SMSCode {
 		
 		smsObj = storeSMS.get(username);
 		if(smsObj != null) {
+			return smsObj;
+/*
 			System.out.println("find... :: "+ username);
 			storeSMS.remove(username);
 			evict(smsObj.getUsername(),smsObj.getSmsCode());
+*/
 		}
-		storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
-		smsObj = storeSMS.get(username);
-		System.out.println("CreateCache-Username ...:: OK :: ");
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
-
-
+		else {
+			storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
+			smsObj = storeSMS.get(username);
+			System.out.println("CreateCache-Username ...:: OK :: ");
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+		}
 		// CALL METHOD SEND SMS TO CLIENT //
 		return smsObj;
 	}
