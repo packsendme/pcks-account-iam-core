@@ -69,35 +69,40 @@ public class SMSCode {
 	
 	@Cacheable(value="SMS", key="{#username, #smsCode}", sync=true)   
 	public SMSDto findSMSCodeUser(String username, String smscode) throws Exception {
-		SMSDto smsObj = null;
+		SMSDto smsObj = new SMSDto();
 		try{
 	    	System.out.println("-----------------------------------------------------------");
 	    	System.out.println("find...:: USERNAME_NEW :: "+ username);
 			System.out.println("find...:: SMS :: "+ smscode);
 	    	System.out.println("-----------------------------------------------------------");
 			Thread.sleep(1000); 
-	     }catch(Exception e){
+	     
+			smsObj = storeSMS.get(username);
+			if(smsObj != null) {
+				if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
+					System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+					return smsObj;
+				}
+				else {
+					smsObj = null;
+					System.out.println("Result FIND  ...:: FOUND:: "+ smsObj.getUsername());
+					return smsObj;
+				}
+			}
+			else{
+			    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+					System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+			    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+					smsObj = null;
+					return smsObj;
+			}
+		}catch(Exception e){
 		    System.out.println("------------------------E R R O R-----------------------------------");
-	    }
-		smsObj = storeSMS.get(username);
-		if(smsObj != null) {
-			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
-				System.out.println("Result FIND  ...:: NOT-FOUND:: ");
-				return smsObj;
-			}
-			else {
-				smsObj = null;
-				System.out.println("Result FIND  ...:: FOUND:: "+ smsObj.getUsername());
-				return smsObj;
-			}
+		    System.out.println(" EXCEPTION "+ e);
+
 		}
-		else{
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				System.out.println("Result FIND  ...:: NOT-FOUND:: ");
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				smsObj = null;
-				return smsObj;
-		}
+		return smsObj;
+
 		/*
 		if(smsObj != null) {
 
