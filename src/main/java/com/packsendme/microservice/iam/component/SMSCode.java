@@ -38,54 +38,51 @@ public class SMSCode {
 		System.out.println("-----------------------------------------");
 		System.out.println("CreateCache--Username :: "+ username +" - "+ smsCode);
         System.out.println("CreateCache-Username HOURS/MINUTES :: "+ timeCreate.getHours() +" "+timeCreate.getMinutes());
-
-
 		SMSDto smsObj = null;
+
 		try{
 			System.out.println("CreateCache-- Creating :: ");
             Thread.sleep(1000); 
-        }catch(Exception e){
-        }
-		
-		smsObj = storeSMS.get(username);
-		if(smsObj != null) {
-			System.out.println("Validate Cache -- NULL :: ");
-			return smsObj;
-/*
-			System.out.println("find... :: "+ username);
-			storeSMS.remove(username);
-			evict(smsObj.getUsername(),smsObj.getSmsCode());
-*/
-		}
-		else {
-			storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
+        
 			smsObj = storeSMS.get(username);
-			System.out.println("CreateCache-Username ...:: OK :: ");
-			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+			if(smsObj != null) {
+				System.out.println("find... :: "+ username);
+				storeSMS.remove(username);
+				evict(smsObj.getUsername(),smsObj.getSmsCode());
+			}
+			else {
+				storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
+				smsObj = storeSMS.get(username);
+				System.out.println("CreateCache-Username ...:: OK :: ");
+				System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+			}
+		}
+		catch(Exception e){
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++"+ e);
 		}
 		// CALL METHOD SEND SMS TO CLIENT //
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMS", key="{#username, #smsCode}", sync=true)   
-	public SMSDto findSMSCodeUser(String username, String smscode) throws Exception {
-		SMSDto smsObj = new SMSDto();
+	@Cacheable(value="SMS", key="{#username, #smsCode}")   
+	public SMSDto findSMSCodeUser(String username, String smsCode) throws Exception {
+		SMSDto smsObj = null;
 		try{
 	    	System.out.println("-----------------------------------------------------------");
 	    	System.out.println("find...:: USERNAME_NEW :: "+ username);
-			System.out.println("find...:: SMS :: "+ smscode);
+			System.out.println("find...:: SMS :: "+ smsCode);
 	    	System.out.println("-----------------------------------------------------------");
 			Thread.sleep(1000); 
 	     
 			smsObj = storeSMS.get(username);
 			if(smsObj != null) {
-				if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
-					System.out.println("Result FIND  ...:: NOT-FOUND:: ");
+				if(smsObj.getUsername() == username && smsObj.getSmsCode() == smsCode) {
+					System.out.println("Result FIND  ...:: FOUND:: ");
 					return smsObj;
 				}
 				else {
 					smsObj = null;
-					System.out.println("Result FIND  ...:: FOUND:: "+ smsObj.getUsername());
+					System.out.println("Result FIND  ...:: 	NOT-FOUND:: "+ smsObj.getUsername());
 					return smsObj;
 				}
 			}
