@@ -150,7 +150,7 @@ public class SMSCode {
     	}
     }
 
-    @CacheEvict(value="SMS",key="{#username, #smsCode}") 
+    @CacheEvict(value="SMS",key="{#username, #smsCode}", allEntries = true) 
     public void evict(String username, String smsCode){
         System.out.println("<<<< DELETE >>>>..."+ username);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
