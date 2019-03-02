@@ -68,7 +68,7 @@ public class UserService {
 			
 			smsDto =  smsObj.findSMSCodeUser(usernameNew, smscode);
 			
-			System.out.println(" ===== VALOR CACHE ====== "+ usernameNew +" - "+smscode);
+			System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getUsername() +" - "+smsDto.getSmsCode());
 			//smsDto =  smsObj.createSMSCodeUser(usernameNew, smscode);
 			
 			if(smsDto != null){
