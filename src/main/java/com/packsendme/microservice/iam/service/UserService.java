@@ -68,31 +68,38 @@ public class UserService {
 			
 			smsDto =  smsObj.findSMSCodeUser(usernameNew, smscode);
 			
-			System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getUsername() +" - "+smsDto.getSmsCode());
+			//System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getUsername() +" - "+smsDto.getSmsCode());
 			//smsDto =  smsObj.createSMSCodeUser(usernameNew, smscode);
 			
 			if(smsDto != null){
-				UserModel entity = userDAO.find(entityFind);
-				if(entity != null) {
-					entity.setUsername(usernameNew);
-					entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY);
-					entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
-					userDAO.update(entity);
-					// Call AccountMicroservice - Update Username - Account
-					ResponseEntity<?> opResultAccount = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
-					if(opResultAccount.getStatusCode() == HttpStatus.OK) {
-						return new ResponseEntity<>(responseObj, HttpStatus.OK);
-					}
-					// Erro AccountService - Compensaçao de resultado
-					else {
-						entity.setUsername(username);
+				if(smsDto.getUsername() == usernameNew && smsDto.getSmsCode() == smscode) {
+					System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getUsername() +" - "+smsDto.getSmsCode());
+
+					UserModel entity = userDAO.find(entityFind);
+					if(entity != null) {
+						entity.setUsername(usernameNew);
+						entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY);
 						entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
 						userDAO.update(entity);
+						// Call AccountMicroservice - Update Username - Account
+						ResponseEntity<?> opResultAccount = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
+						if(opResultAccount.getStatusCode() == HttpStatus.OK) {
+							return new ResponseEntity<>(responseObj, HttpStatus.OK);
+						}
+						// Erro AccountService - Compensaçao de resultado
+						else {
+							entity.setUsername(username);
+							entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
+							userDAO.update(entity);
+							return new ResponseEntity<>(responseObj, HttpStatus.FORBIDDEN);
+						}
+					}
+					else {
 						return new ResponseEntity<>(responseObj, HttpStatus.FORBIDDEN);
 					}
 				}
-				else {
-					return new ResponseEntity<>(responseObj, HttpStatus.FORBIDDEN);
+				else{
+					return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 				}
 			} // Erro SMSCODE Not Found
 			else{
@@ -100,11 +107,11 @@ public class UserService {
 			}
 		}
 		catch (Exception e) {
-			UserModel entityRollback = new UserModel();
-			entityRollback.setUsername(usernameNew);
-			UserModel entity = userDAO.find(entityRollback);
-			entity.setUsername(username);
-			userDAO.update(entity);
+		//	UserModel entityRollback = new UserModel();
+	//		entityRollback.setUsername(usernameNew);
+	//		UserModel entity = userDAO.find(entityRollback);
+	//		entity.setUsername(username);
+	//		userDAO.update(entity);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
