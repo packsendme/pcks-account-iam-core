@@ -79,7 +79,7 @@ public class UserService {
 				System.out.println("USERNAME_NEW "+ usernameNew);
 				System.out.println("SMSCODE "+ smscode);
 				
-				if(smsDto.getUsername() == usernameNew && smsDto.getSmsCode() == smscode) {
+				if(smsDto.getUsername().equals(usernameNew) && smsDto.getSmsCode().equals(smscode)) {
 					System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getUsername() +" - "+smsDto.getSmsCode());
 
 					UserModel entity = userDAO.find(entityFind);
