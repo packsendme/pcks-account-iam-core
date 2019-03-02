@@ -76,7 +76,7 @@ public class SMSCode {
 	     
 			smsObj = storeSMS.get(username);
 			if(smsObj != null) {
-				if(smsObj.getUsername() == username && smsObj.getSmsCode() == smsCode) {
+				if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smsCode)) {
 					System.out.println("Result FIND  ...:: FOUND:: ");
 					return smsObj;
 				}
