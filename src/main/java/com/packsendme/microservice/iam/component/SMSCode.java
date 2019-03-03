@@ -64,7 +64,7 @@ public class SMSCode {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMS", key="{#username, #smsCode}")   
+	@Cacheable(value="SMS", key="{#username, #smsCode}", sync=true)   
 	public SMSDto findSMSCodeUser(String username, String smsCode) throws Exception {
 		SMSDto smsObj = null;
 		try{
