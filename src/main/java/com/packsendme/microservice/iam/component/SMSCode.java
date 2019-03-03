@@ -154,11 +154,11 @@ public class SMSCode {
     	}
     }
   
-    @CacheEvict(value="SMSCache",key="{#username, #smsCode}")    
+    @CacheEvict(value="SMSCache",key="{#username}")    
     public void evict(String username, String smsCode){
         System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
-        cacheManager.getCache("SMSCache").evict(username);
+        //cacheManager.getCache("SMSCache").evict(username);
     }
     
 	public String generateSMSCode() {
