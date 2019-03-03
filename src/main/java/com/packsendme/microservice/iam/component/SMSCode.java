@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,6 +27,9 @@ public class SMSCode {
 
 	@Autowired
 	ConvertFormat formatObj;
+	
+	@Autowired
+	CacheManager cacheManager;
 	
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
@@ -154,6 +158,7 @@ public class SMSCode {
     public void evict(String username, String smsCode){
         System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+        cacheManager.getCache("SMSCache").evict(username);
     }
     
 	public String generateSMSCode() {
