@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.dto.SMSDto;
 
-
-@ComponentScan("com.packsendme.lib.utility")
 @Service
 @ComponentScan("com.packsendme.microservice.iam.component")
 @CacheConfig(cacheNames={"SMS"})
