@@ -144,8 +144,10 @@ public class SMSCode {
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
+       		   storeSMS.remove(itr);
        		   evict(smsObj.getUsername(),smsObj.getSmsCode());
        		   itr.remove();
+       		   
        	   }
     	}
     }
