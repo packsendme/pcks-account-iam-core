@@ -19,7 +19,7 @@ public class CacheApp {
 	@Bean
 	public CacheManager cacheManager() {
 		SimpleCacheManager cacheManager = new SimpleCacheManager();
-		Cache cacheSMS = new ConcurrentMapCache("SMS");
+		Cache cacheSMS = new ConcurrentMapCache("SMSCache");
 		cacheManager.setCaches(Arrays.asList(cacheSMS));
 		return cacheManager;
 	}
