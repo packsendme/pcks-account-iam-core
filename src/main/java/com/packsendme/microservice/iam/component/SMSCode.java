@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.dto.SMSDto;
 
-import net.sf.ehcache.CacheManager;
 
 @Service
 @ComponentScan("com.packsendme.microservice.iam.component")
@@ -28,9 +27,6 @@ public class SMSCode {
 
 	@Autowired
 	ConvertFormat formatObj;
-	
-	@Autowired
-	CacheManager cacheManager;
 	
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
