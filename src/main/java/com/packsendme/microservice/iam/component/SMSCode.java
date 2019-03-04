@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.dto.SMSDto;
+
+import net.sf.ehcache.CacheManager;
 
 @Service
 @ComponentScan("com.packsendme.microservice.iam.component")
@@ -34,7 +35,7 @@ public class SMSCode {
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
 	
-	@Cacheable(value="SMSCache", key="{#username, #smsCode}", sync=true)    
+	@Cacheable(value="SMSCache", key="{#username, #smsCode}")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -155,11 +156,11 @@ public class SMSCode {
     }
   
     //@CacheEvict(value="SMSCache",key="{#username}")   allEntries = true)
-    @CacheEvict(value="SMSCache",allEntries = true)   
+    @CacheEvict(cacheNames="SMSCache",key="{#username, #smsCode}")  
     public void evict(String username, String smsCode){
         System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
-        //cacheManager.getCache("SMSCache").evict(username);
+        //cacheManager.getCache("SMSCache").
     }
     
 	public String generateSMSCode() {
