@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,6 @@ import com.packsendme.microservice.iam.dto.SMSDto;
 
 
 @Service
-@ComponentScan("com.packsendme.microservice.iam.component")
 @CacheConfig(cacheNames={"SMSCache"})
 public class SMSCode {
 
@@ -63,7 +61,7 @@ public class SMSCode {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMSCache", key="{#username, #smsCode}", sync=true)   
+	@Cacheable(value="SMSCache", key="{#username, #smsCode}")   
 	public SMSDto findSMSCodeUser(String username, String smsCode) throws Exception {
 		SMSDto smsObj = null;
 		try{
@@ -143,8 +141,9 @@ public class SMSCode {
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
-       		   storeSMS.remove(itr);
+       		   
        		   evict(smsObj.getUsername(),smsObj.getSmsCode());
+       		   storeSMS.remove(itr);
        		   itr.remove();
        		   
        	   }
@@ -153,7 +152,7 @@ public class SMSCode {
   
     //@CacheEvict(value="SMSCache",key="{#username}")   allEntries = true)
     //@CacheEvict(cacheNames="SMSCache",key="{#username, #smsCode}") 
-    @CacheEvict(key="#username")
+    @CacheEvict(value="SMSCache", key="#username")
     public void evict(String username, String smsCode){
         System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
