@@ -12,7 +12,6 @@ import com.packsendme.lib.common.constants.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
 import com.packsendme.lib.utility.ConvertFormat;
-import com.packsendme.microservice.iam.component.SMSCode;
 import com.packsendme.microservice.iam.controller.AccountClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
 import com.packsendme.microservice.iam.dto.SMSDto;
@@ -29,7 +28,7 @@ public class UserService {
 	AccountClient accountCliente;
 
 	@Autowired
-	SMSCode smsObj;
+	SMSCache smsObj;
 	
 	
 	@Autowired

@@ -11,7 +11,7 @@ import com.packsendme.lib.common.constants.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
 import com.packsendme.lib.utility.ConvertFormat;
-import com.packsendme.microservice.iam.component.SMSCode;
+import com.packsendme.microservice.iam.component.GeneratorSMSCode;
 import com.packsendme.microservice.iam.dao.UserDAO;
 import com.packsendme.microservice.iam.dto.SMSDto;
 import com.packsendme.microservice.iam.repository.UserModel;
@@ -23,8 +23,10 @@ public class UserFirstAccessService {
 	UserDAO userDAO;
 	
 	@Autowired
-	SMSCode smsObj;
+	SMSCache smsObj;
 	
+	@Autowired
+	GeneratorSMSCode smscodeObj;
 	
 	@Autowired
 	ConvertFormat formatObj;
@@ -37,7 +39,7 @@ public class UserFirstAccessService {
 			userFind = userDAO.find(userFind);
 			// FirstAccess: User does not exist in user base that generator SMSCode
 			if(userFind == null) {
-				String smsCode = smsObj.generateSMSCode();
+				String smsCode = smscodeObj.generateSMSCode();
 				SMSDto sms = smsObj.createSMSCodeUser(username,smsCode);
 				if(sms != null) {
 					Response<SMSDto> responseSMS = new Response<SMSDto>(HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), sms);
