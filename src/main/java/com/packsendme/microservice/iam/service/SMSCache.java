@@ -1,12 +1,9 @@
-package com.packsendme.microservice.iam.component;
+package com.packsendme.microservice.iam.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -21,7 +18,7 @@ import com.packsendme.microservice.iam.dto.SMSDto;
 
 @Service
 @CacheConfig(cacheNames={"SMSCache"})
-public class SMSCode {
+public class SMSCache {
 
 	@Autowired
 	ConvertFormat formatObj;
@@ -93,10 +90,10 @@ public class SMSCode {
 		}catch(Exception e){
 		    System.out.println("------------------------E R R O R-----------------------------------");
 		    System.out.println(" EXCEPTION "+ e);
-
 		}
 		return smsObj;
-
+	}
+	
 		/*
 		if(smsObj != null) {
 
@@ -121,7 +118,7 @@ public class SMSCode {
 			smsObj = null;
 			return smsObj;
 		}*/
-	}
+	
 		
 	   
     @Scheduled(cron = "0 * * ? * *")
@@ -159,21 +156,7 @@ public class SMSCode {
         //cacheManager.getCache("SMSCache").
     }
     
-	public String generateSMSCode() {
-		String codSMS = "";
-		// Metemos en una lista los números del 1 al 40.
-		List<Integer> numbers = new ArrayList<>(40);
-		for (int i=1;i<10;i++){
-		   numbers.add(i);
-		}
-		Random random = new Random();
-		for(int n = 1; n<=4;n++) {
-			  int randomIndex = random.nextInt(numbers.size());
-			  codSMS = randomIndex + codSMS;
-			  numbers.remove(randomIndex);
-		}
-		return codSMS;
-	}
+
 
 		
 }
