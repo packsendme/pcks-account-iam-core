@@ -142,7 +142,7 @@ public class SMSCache {
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
        		   
        		  // evict(smsObj.getUsername(),smsObj.getSmsCode());
-       		   evict(smsObj.getUsername());
+       		   evict(smsObj.getSmsCode());
         		  
        		   storeSMS.remove(itr);
        		   itr.remove();
@@ -154,12 +154,12 @@ public class SMSCache {
     //@CacheEvict(value="SMSCache",key="{#username}")   allEntries = true)
     //@CacheEvict(cacheNames="SMSCache",key="{#username, #smsCode}") 
    // @CacheEvict(value="SMSCache", key="#username")
-    @CacheEvict(value="SMSCache",key="{#username}") 
-    public void evict(String username){
+    @CacheEvict(value="SMSCache",key="{#smsCode}") 
+    public void evict(String smsCode){
     //public void evict(){
         
  //   	System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
-       	System.out.println("<<<< DELETE_00 >>>>...");
+       	System.out.println("<<<< DELETE_00 >>>>..."+ smsCode);
         
     	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
         //cacheManager.getCache("SMSCache").
