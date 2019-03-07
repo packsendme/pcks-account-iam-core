@@ -120,7 +120,7 @@ public class SMSCache {
 		}*/
 	
 		
-	   
+	
     @Scheduled(cron = "0 * * ? * *")
     public void checkCacheDelete(){
 		Timestamp timestampCache = new Timestamp(System.currentTimeMillis());
@@ -155,7 +155,7 @@ public class SMSCache {
     //@CacheEvict(value="SMSCache",key="{#username}")   allEntries = true)
     //@CacheEvict(cacheNames="SMSCache",key="{#username, #smsCode}") 
    // @CacheEvict(value="SMSCache", key="#username")
-    @CacheEvict(value="SMSCache",key="{#smsCode}") 
+    @CacheEvict(value="SMSCache",key="#smsCode") 
     public void evict(String smsCode){
     //public void evict(){
         
