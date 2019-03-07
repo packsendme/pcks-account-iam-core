@@ -159,7 +159,7 @@ public class SMSCache {
     //public void evict(){
         
  //   	System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
-       	System.out.println("<<<< DELETE_00 >>>>...");
+       	System.out.println("<<<< DELETE_00 >>>>..."+ smsCode);
         
     	System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
         //cacheManager.getCache("SMSCache").
