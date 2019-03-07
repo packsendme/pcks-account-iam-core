@@ -47,7 +47,7 @@ public class SMSCache {
 			else {
 				storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
 				smsObj = storeSMS.get(username);
-				System.out.println("CreateCache-Username ...:: OK :: ");
+				System.out.println("CreateCache-Username ...:: OK :: smsCode "+ smsCode);
 				System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
 			}
 		}
@@ -137,6 +137,7 @@ public class SMSCache {
        	   if(minutes >= 1) {
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        		   System.out.println("checkCacheDelete-Username ::"+ smsObj.getUsername());
+       		   System.out.println("checkCacheDelete-smsCode ::"+ smsObj.getSmsCode());
 
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
