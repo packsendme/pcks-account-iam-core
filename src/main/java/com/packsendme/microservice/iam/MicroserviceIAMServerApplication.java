@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableEurekaClient
 @EnableFeignClients
 @EnableCaching
-//@EnableScheduling
+@EnableScheduling
 public class MicroserviceIAMServerApplication {
 
 	public static void main(String[] args) {
