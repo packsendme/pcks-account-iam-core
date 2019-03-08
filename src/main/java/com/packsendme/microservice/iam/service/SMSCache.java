@@ -155,7 +155,7 @@ public class SMSCache {
     //@CacheEvict(value="SMSCache",key="{#username}")   allEntries = true)
     //@CacheEvict(cacheNames="SMSCache",key="{#username, #smsCode}") 
    
-    @CacheEvict(value = "SMSCache", key = "#username + #smsCode")
+    @CacheEvict(value = "SMSCache", key = "{#username, #smsCode}", allEntries = true)
     public void evict(String username, String smsCode){
     //public void evict(){
         
