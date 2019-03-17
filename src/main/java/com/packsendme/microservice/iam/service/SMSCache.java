@@ -26,7 +26,7 @@ public class SMSCache {
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
 	
-	@Cacheable(value="SMSCache", key="{#username, #smsCode}")    
+	@Cacheable(value="SMSCache", key="#username, #smsCode")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -58,7 +58,7 @@ public class SMSCache {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMSCache", key="{#username, #smsCode}")   
+	@Cacheable(value="SMSCache", key="#username, #smsCode")   
 	public SMSDto findSMSCodeUser(String username, String smsCode) throws Exception {
 		SMSDto smsObj = null;
 		try{
@@ -155,12 +155,12 @@ public class SMSCache {
     	}
     }
   
-    //@CacheEvict(cacheNames="SMSCache",key="{#username, #smsCode}") 
-   
+    
     //@CacheEvict(value = "SMSCache", key = "#username")
-    @CacheEvict(value="SMSCache",key="#username, #smsCode", allEntries = true)
+    //@CacheEvict(value="SMSCache",key="#username, #smsCode", allEntries = true)
+    
+    @CacheEvict(value="SMSCache", key="#username, #smsCode")    
     public void evict(String username, String smsCode){
-    //public void evict(){
         
  //   	System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
        	System.out.println("<<<< DELETE_00 >>>>..."+ username);
