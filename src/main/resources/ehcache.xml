@@ -6,11 +6,8 @@
          dynamicConfig="true">
 
     <cache name="SMSCache"
-           maxElementsInMemory="100"
            eternal="false"
            overflowToDisk="false"
-           timeToLiveSeconds="300"
-           timeToIdleSeconds="0"
            memoryStoreEvictionPolicy="LFU"
            transactionalMode="off">
     </cache>
