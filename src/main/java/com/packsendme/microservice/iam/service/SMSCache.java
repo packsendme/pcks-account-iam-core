@@ -6,15 +6,16 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.dto.SMSDto;
+
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Ehcache;
 
 
 @Service
@@ -31,7 +32,7 @@ public class SMSCache {
     private CacheManager cacheManager;   
     
 	
-	@Cacheable(value="SMSCache", key="{#username, #smsCode}")    
+	@Cacheable(value="SMSCache", key="{#username}")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -63,7 +64,7 @@ public class SMSCache {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMSCache", key="{#username, #smsCode}")   
+	@Cacheable(value="SMSCache", key="{#usernames}")   
 	public SMSDto findSMSCodeUser(String username, String smsCode) throws Exception {
 		SMSDto smsObj = null;
 		try{
@@ -164,9 +165,12 @@ public class SMSCache {
     //@CacheEvict(value = "SMSCache", key = "#username")
     //@CacheEvict(value="SMSCache",key="#username, #smsCode", allEntries = true)
     
-    @CacheEvict(value="SMSCache", key="#username")    
+    //@CacheEvict(value="SMSCache", key="#username")    
     public void deleteCacheSMS(String username){
-    	   cacheManager.getCache("SMSCache").evict(username);  
+    	Ehcache ehcache = cacheManager.getEhcache("SMSCache");
+    	  ehcache.remove(username);
+
+    	   
         
  //   	System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
        	System.out.println("<<<< DELETE_00 >>>>..."+ username);
