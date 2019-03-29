@@ -143,7 +143,7 @@ public class SMSCache {
        	   
    		   System.out.println(" checkCacheDelete minutes "+ minutes);
 
-       	   if(minutes >= 1) {
+       	   if(minutes >= 0.5) {
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        		   System.out.println("checkCacheDelete-Username ::"+ smsObj.getUsername());
        		   System.out.println("checkCacheDelete-smsCode ::"+ smsObj.getSmsCode());
