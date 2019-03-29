@@ -127,7 +127,7 @@ public class SMSCache {
 	
 		
 	
-    @Scheduled(cron = "0 * * ? * *")
+    @Scheduled(cron = "0,20 0 0 ? * * *")
     public void checkCacheDelete(){
 		Timestamp timestampCache = new Timestamp(System.currentTimeMillis());
 		
