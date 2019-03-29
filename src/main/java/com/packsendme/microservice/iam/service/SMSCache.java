@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,10 @@ public class SMSCache {
 	
 	private static Map<String, SMSDto> storeSMS = new HashMap<String, SMSDto>();
 
+	
+    @Autowired 
+    private CacheManager cacheManager;   
+    
 	
 	@Cacheable(value="SMSCache", key="{#username, #smsCode}")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
@@ -148,7 +153,7 @@ public class SMSCache {
        		   
        		   //evict(smsObj.getUsername(), smsObj.getSmsCode());
      		  
-       		   evict(smsObj.getUsername());
+       		deleteCacheSMS(smsObj.getUsername());
   
        		   
        	   }
@@ -159,8 +164,9 @@ public class SMSCache {
     //@CacheEvict(value = "SMSCache", key = "#username")
     //@CacheEvict(value="SMSCache",key="#username, #smsCode", allEntries = true)
     
-    @CacheEvict(value="SMSCache", key="#p0")    
-    public void evict(String username){
+    @CacheEvict(value="SMSCache", key="#username")    
+    public void deleteCacheSMS(String username){
+    	   cacheManager.getCache("SMSCache").evict(username);  
         
  //   	System.out.println("<<<< DELETE_00 >>>>... username "+ username + " CODE "+  smsCode);
        	System.out.println("<<<< DELETE_00 >>>>..."+ username);
