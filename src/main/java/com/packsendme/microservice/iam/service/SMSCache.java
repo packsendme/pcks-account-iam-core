@@ -127,7 +127,7 @@ public class SMSCache {
 	
 		
 	
-    @Scheduled(cron = "0/15 * * * * *")
+    @Scheduled(cron = "0/55 * * * * *")
     public void checkCacheDelete(){
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println(" checkCacheDelete");
