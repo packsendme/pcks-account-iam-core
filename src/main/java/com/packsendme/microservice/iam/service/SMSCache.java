@@ -158,7 +158,7 @@ public class SMSCache {
   
     public void deleteCacheSMS(String username){
     	Ehcache ehcache = cacheManager.getEhcache("SMSCache");
-    	ehcache.remove(username);
+    	ehcache.remove(username, true);
     }
     
 
