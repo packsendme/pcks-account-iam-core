@@ -127,10 +127,9 @@ public class SMSCache {
 	
 		
 	
-    @Scheduled(cron = "0/55 * * * * *")
+    //@Scheduled(cron = "0/55 * * * * *")
+	@Scheduled(cron = "0 * * *")
     public void checkCacheDelete(){
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
-		System.out.println(" checkCacheDelete");
 		Timestamp timestampCache = new Timestamp(System.currentTimeMillis());
     	Iterator<Map.Entry<String, SMSDto>> itr = storeSMS.entrySet().iterator();
  
@@ -143,17 +142,14 @@ public class SMSCache {
        	   int seconds = (int) milliseconds / 1000;
        	   int minutes = (seconds % 3600) / 60;
        	   
-   		   System.out.println(" checkCacheDelete minutes "+ minutes);
-
        	   if(minutes >= 1) {
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+       		   System.out.println("CHECK CACHE DELETE -- "+ minutes);
        		   System.out.println("checkCacheDelete-Username ::"+ smsObj.getUsername());
        		   System.out.println("checkCacheDelete-smsCode ::"+ smsObj.getSmsCode());
-
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
-       		   
-       		  
+       		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        		   storeSMS.remove(itr);
        		   itr.remove();
        		   deleteCacheSMS(smsObj.getUsername());
