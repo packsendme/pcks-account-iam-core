@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import net.sf.ehcache.Ehcache;
 
 
 @Service
-@CacheConfig(cacheNames="SMSCache")
+//@CacheConfig(cacheNames="SMSCache")
 public class SMSCache {
 
 	@Autowired
