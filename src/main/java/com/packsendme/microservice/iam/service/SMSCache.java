@@ -31,7 +31,7 @@ public class SMSCache {
     private CacheManager cacheManager;   
     
 	
-	@Cacheable(value="SMSCache", key="{#username}")    
+	@Cacheable(value="SMSCache", key="{#username,#smsCode}")    
 	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -63,7 +63,7 @@ public class SMSCache {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMSCache", key="{#usernames}")   
+	@Cacheable(value="SMSCache", key="{#username,#smsCode}")   
 	public SMSDto findSMSCodeUser(String username, String smsCode) throws Exception {
 		SMSDto smsObj = null;
 		try{
@@ -150,16 +150,16 @@ public class SMSCache {
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
        		   storeSMS.remove(itr);
        		   itr.remove();
-       		   deleteCacheSMS(smsObj.getUsername());
+       		   deleteCacheSMS(smsObj);
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        	   }
     	}
     }
   
-    public void deleteCacheSMS(String username){
+    public void deleteCacheSMS(Object user){
     	Ehcache ehcache = cacheManager.getEhcache("SMSCache");
-    	ehcache.remove(username, true);
-    	ehcache.removeAll();
+    	ehcache.remove(user, true);
+    	//ehcache.removeAll();
     }
     
 
