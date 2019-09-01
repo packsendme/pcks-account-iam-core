@@ -86,7 +86,7 @@ public class UserController {
  	
  	@DeleteMapping("/iam/manager/sms/{username}")
 	public ResponseEntity<?> deleteSMSCode(@Validated @PathVariable("username") String username) {
- 		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.NOT_FOUND_SMS_CODE.getAction(), null);
+ 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.NOT_FOUND_SMS_CODE.getAction(), null);
  		userSMSO.deleteCacheSMS(username);
  		return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
  		

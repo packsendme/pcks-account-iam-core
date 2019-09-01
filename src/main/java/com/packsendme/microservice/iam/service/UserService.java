@@ -33,17 +33,15 @@ public class UserService {
 	
 	@Autowired
 	ConvertFormat formatObj;
-	
 	public ResponseEntity<?> findUserToLogin(String username, String password) {
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.LOGIN_USER.getAction(), null);
+		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), null);
 		UserModel entity = new UserModel(); 
-
 		try {
 			entity.setUsername(username);
 			entity.setPassword(password);
 			entity = userDAO.find(entity);
 			if(entity != null) {
-				responseObj = new Response<UserModel>(HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
+				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 			else {
@@ -59,7 +57,7 @@ public class UserService {
 	
 	
 	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smscode, String dtAction) {
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
+		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		UserModel entityFind = new UserModel();
 		SMSDto smsDto = new SMSDto();
 		entityFind.setUsername(username);
@@ -123,7 +121,7 @@ public class UserService {
 	}
 	
 	public ResponseEntity<?> updatePasswordByUsername(String username, String password, String dtAction) {
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.UPDATE_PASSWORD.getAction(), null);
+		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_PASSWORD.getAction(), null);
 		UserModel entityFind = new UserModel();
 		entityFind.setUsername(username);
 		
@@ -148,7 +146,7 @@ public class UserService {
 	
 	
 	public ResponseEntity<?> cancelUserAccessByUsername(String username, String dtAction) throws Exception {
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.CANCEL_USERNAME.getAction(), null);
+		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.CANCEL_USERNAME.getAction(), null);
 		//Convert Date from String to Date
 		Date dtNow = formatObj.convertStringToDate(dtAction);
 		UserModel entity = new UserModel(); 
