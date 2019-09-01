@@ -34,7 +34,7 @@ public class UserFirstAccessService {
 	public ResponseEntity<?> findUserToFirstAccess(String username, String dtAction) {
 		UserModel userFind = new UserModel();
 		userFind.setUsername(username);
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USERNAME_VALIDATE_ACCESS.getAction(), userFind);
+		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.USERNAME_VALIDATE_ACCESS.getAction(), userFind);
 		try{
 			userFind = userDAO.find(userFind);
 			// FirstAccess: User does not exist in user base that generator SMSCode
@@ -42,7 +42,7 @@ public class UserFirstAccessService {
 				String smsCode = smscodeObj.generateSMSCode();
 				SMSDto sms = smsObj.createSMSCodeUser(username,smsCode);
 				if(sms != null) {
-					Response<SMSDto> responseSMS = new Response<SMSDto>(HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), sms);
+					Response<SMSDto> responseSMS = new Response<SMSDto>(0, HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), sms);
 					return new ResponseEntity<>(responseSMS, HttpStatus.OK);
 				}
 				else
@@ -63,7 +63,7 @@ public class UserFirstAccessService {
 	
 	// Method Call (AccountService) After register Account to enable User Access
 	public ResponseEntity<?> registerUser(String username, String password, String dateAction) {
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.USER_ACCESS_CREATED.getAction(), null);
+		Response<UserModel> responseObj = new Response<UserModel>(0, HttpExceptionPackSend.USER_ACCESS_CREATED.getAction(), null);
 		try {
 			Date dateCreation = formatObj.convertStringToDate(dateAction);
 			UserModel entity = new UserModel(username, password, MicroservicesConstants.USERNAME_ACCOUNT_ACTIVE,
@@ -77,7 +77,7 @@ public class UserFirstAccessService {
 	}
 	
 	public ResponseEntity<?> findSMSCodeToFirstAccess(String username, String smscode) throws Exception {
-		Response<UserModel> responseObj = new Response<UserModel>(HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
+		Response<UserModel> responseObj = new Response<UserModel>(0, HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		SMSDto smsDto = new SMSDto();
 
 		try {
