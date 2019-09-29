@@ -82,7 +82,7 @@ public class UserFirstAccessService {
 
 		try {
 			smsDto = smsObj.findSMSCodeUser(username,smscode);
-			if(smsObj != null) {
+			if(smsDto != null) {
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 			else {
