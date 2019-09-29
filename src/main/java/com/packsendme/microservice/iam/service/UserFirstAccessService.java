@@ -76,23 +76,33 @@ public class UserFirstAccessService {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	public ResponseEntity<?> findSMSCodeToFirstAccess(String username, String smscode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(0, HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		SMSDto smsDto = null;
 
 		try {
 			smsDto = smsObj.findSMSCodeUser(username,smscode);
-			if(smsDto != null) {
+			if(smsDto == null) {
+				System.out.println(" RESULT findSMSCodeToFirstAccess IS "+ HttpStatus.NOT_FOUND);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
-			else {
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+			else if(smsDto != null){
+				System.out.println(" RESULT findSMSCodeToFirstAccess IS "+ HttpStatus.FOUND);
+				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 		}
 		catch (Exception e) {
 			System.out.println("EXCEPTION ERROR"+ e);
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+
+
+	private ResponseEntity<?> extracted() {
+		return null;
 	}
 	
 		
