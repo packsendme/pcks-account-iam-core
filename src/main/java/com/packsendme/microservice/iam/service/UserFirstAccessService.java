@@ -85,7 +85,7 @@ public class UserFirstAccessService {
 			smsDto = smsObj.findSMSCodeUser(username,smscode);
 			if(smsDto == null) {
 				System.out.println(" RESULT findSMSCodeToFirstAccess IS "+ HttpStatus.NOT_FOUND);
-				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
+				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 			else if(smsDto != null){
 				System.out.println(" RESULT findSMSCodeToFirstAccess IS "+ HttpStatus.FOUND);
