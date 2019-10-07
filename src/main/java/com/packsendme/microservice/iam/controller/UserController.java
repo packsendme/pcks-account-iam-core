@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.packsendme.lib.common.constants.HttpExceptionPackSend;
 import com.packsendme.lib.common.response.Response;
+import com.packsendme.microservice.iam.dto.UserDto;
 import com.packsendme.microservice.iam.repository.UserModel;
 import com.packsendme.microservice.iam.service.SMSCache;
 import com.packsendme.microservice.iam.service.UserFirstAccessService;
@@ -77,11 +79,9 @@ public class UserController {
 	}
 
  
- 	@PutMapping("/iam/manager/{username}/{password}/{dtAction}")
-	public ResponseEntity<?> changePasswordToUser(@Validated @PathVariable("username") String username,
-			@Validated @PathVariable("password") String password,
-			@Validated @PathVariable("dtAction") String dtAction) {
-		return userService.updatePasswordByUsername(username,password,dtAction);
+ 	@PutMapping("/iam/manager/")
+	public ResponseEntity<?> changePasswordToUser(@Validated @RequestBody UserDto user) {
+		return userService.updatePasswordByUsername(user);
 	}
  	
  	@DeleteMapping("/iam/manager/sms/{username}")
