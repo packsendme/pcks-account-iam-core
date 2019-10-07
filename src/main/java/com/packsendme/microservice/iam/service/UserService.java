@@ -15,6 +15,7 @@ import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.controller.AccountClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
 import com.packsendme.microservice.iam.dto.SMSDto;
+import com.packsendme.microservice.iam.dto.UserDto;
 import com.packsendme.microservice.iam.repository.UserModel;
 
 @Service
@@ -65,11 +66,7 @@ public class UserService {
 			
 			smsDto =  smsObj.findSMSCodeUser(usernameNew, smscode);
 			
-			//System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getUsername() +" - "+smsDto.getSmsCode());
-			//smsDto =  smsObj.createSMSCodeUser(usernameNew, smscode);
-			
 			if(smsDto != null){
-				
 				System.out.println("USERNAME "+ smsDto.getUsername());
 				System.out.println("SMSCODE "+ smsDto.getSmsCode());
 				
@@ -120,18 +117,17 @@ public class UserService {
 		}
 	}
 	
-	public ResponseEntity<?> updatePasswordByUsername(String username, String password, String dtAction) {
+	public ResponseEntity<?> updatePasswordByUsername(UserDto user) {
 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_PASSWORD.getAction(), null);
+
 		UserModel entityFind = new UserModel();
-		entityFind.setUsername(username);
-		
+		entityFind.setUsername(user.getUsername());
 		try {
-			entityFind.setUsername(username);
 			UserModel entity = userDAO.find(entityFind);
 			
 			if(entity != null) {
-				entity.setPassword(password);
-				entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
+				entity.setPassword(user.getPassword());
+				entity.setDateUpdate(formatObj.convertStringToDate(user.getDtOperation()));
 				userDAO.update(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}

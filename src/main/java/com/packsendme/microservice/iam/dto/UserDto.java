@@ -15,21 +15,21 @@ public class UserDto implements Serializable {
     private boolean activated;
     private String activationKey;
     private boolean resetPasswordKey;
-    private String dtAction;
+    private String dtOperation;
     
     
     public UserDto() {
 	}
 
 	public UserDto(String username, String password, boolean activated, String activationKey,
-			boolean resetPasswordKey, String dtAction) {
+			boolean resetPasswordKey, String dtOperation) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.activated = activated;
 		this.activationKey = activationKey;
 		this.resetPasswordKey = resetPasswordKey;
-		this.dtAction = dtAction;
+		this.dtOperation = dtOperation;
 		
 	}
 
@@ -81,12 +81,12 @@ public class UserDto implements Serializable {
 		this.id = id;
 	}
 
-	public String getDtAction() {
-		return dtAction;
+	public String getDtOperation() {
+		return dtOperation;
 	}
 
-	public void setDtAction(String dtAction) {
-		this.dtAction = dtAction;
+	public void setDtOperation(String dtOperation) {
+		this.dtOperation = dtOperation;
 	}
 
 }
