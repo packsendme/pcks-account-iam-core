@@ -62,6 +62,8 @@ public class UserDAO implements IUserMongo {
 	@Override
 	public UserModel update(UserModel entity) {
 		try {
+			System.out.println(" updatePasswordByUsername - update "+ entity.getPassword());
+
 			return  entity = userRepository.save(entity);
 		}
 		catch (Exception e) {

@@ -122,17 +122,22 @@ public class UserService {
 
 		UserModel entityFind = new UserModel();
 		entityFind.setUsername(user.getUsername());
+		System.out.println(" updatePasswordByUsername - USERNAME "+ entityFind.getUsername());
+
 		try {
 			UserModel entity = userDAO.find(entityFind);
-			
+			System.out.println(" updatePasswordByUsername - find "+ entityFind.getUsername());
+
 			if(entity != null) {
 				entity.setPassword(user.getPassword());
-				entity.setDateUpdate(formatObj.convertStringToDate(user.getDtOperation()));
+				entity.setDateUpdate(formatObj.convertStringToDate(user.getDateOperation()));
+				System.out.println(" updatePasswordByUsername - password "+ entityFind.getPassword());
+
 				userDAO.update(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
 			else {
-				return new ResponseEntity<>(responseObj, HttpStatus.FORBIDDEN);
+				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
 			}
 		}
 		catch (Exception e) {
