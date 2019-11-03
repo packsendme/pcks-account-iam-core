@@ -127,8 +127,9 @@ public class SMSCache {
 		
 	
     //@Scheduled(cron = "0/55 * * * * *")
-	@Scheduled(cron = "0 * * * * *")
-    public void checkCacheDelete(){
+	//@Scheduled(cron = "0 * * * * *")
+	@Scheduled(fixedRate = 1000)
+	public void checkCacheDelete(){
 		Timestamp timestampCache = new Timestamp(System.currentTimeMillis());
     	Iterator<Map.Entry<String, SMSDto>> itr = storeSMS.entrySet().iterator();
  
