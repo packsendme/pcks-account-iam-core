@@ -149,17 +149,17 @@ public class SMSCache {
        		   System.out.println("checkCacheDelete-smsCode ::"+ smsObj.getSmsCode());
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
-       		   storeSMS.remove(itr);
+       		   //storeSMS.remove(itr);
        		   itr.remove();
-       		   deleteCacheSMS(smsObj);
+       		   deleteCacheSMS(smsObj.getUsername());
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        	   }
     	}
     }
   
-    public void deleteCacheSMS(Object user){
+    public void deleteCacheSMS(Object id){
     	Ehcache ehcache = cacheManager.getEhcache("SMSCache");
-    	ehcache.remove(user, true);
+    	ehcache.remove(id, true);
     	//ehcache.removeAll();
     }
     
