@@ -32,10 +32,10 @@ public class SMSCache {
     
 	
 	@Cacheable(value="SMSCache", key="{#smscode}")    
-	public SMSDto createSMSCodeUser(String smsCodeUsername) throws Exception {
+	public SMSDto createSMSCodeUser(String smscode) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
-		System.out.println("CreateCache--Username+SMS :: "+ smsCodeUsername);
+		System.out.println("CreateCache--Username+SMS :: "+ smscode);
         System.out.println("CreateCache-Username HOURS/MINUTES :: "+ timeCreate.getHours() +" "+timeCreate.getMinutes());
 		SMSDto smsObj = null;
 
@@ -43,16 +43,16 @@ public class SMSCache {
 			System.out.println("CreateCache-- Creating :: ");
             Thread.sleep(1000); 
         
-			smsObj = storeSMS.get(smsCodeUsername);
+			smsObj = storeSMS.get(smscode);
 			if(smsObj != null) {
-				System.out.println("find... :: "+ smsCodeUsername);
-				storeSMS.remove(smsCodeUsername);
+				System.out.println("find... :: "+ smscode);
+				storeSMS.remove(smscode);
 				//evict(smsObj.getUsername(),smsObj.getSmsCode());
 			}
 			else {
-				storeSMS.put(smsCodeUsername,new SMSDto(smsCodeUsername, timeCreate.getTime()));
-				smsObj = storeSMS.get(smsCodeUsername);
-				System.out.println("CreateCache-Username ...:: OK :: smsCode "+ smsCodeUsername);
+				storeSMS.put(smscode,new SMSDto(smscode, timeCreate.getTime()));
+				smsObj = storeSMS.get(smscode);
+				System.out.println("CreateCache-Username ...:: OK :: smsCode "+ smscode);
 				System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
 			}
 		}
@@ -64,17 +64,17 @@ public class SMSCache {
 	}
 	
 	@Cacheable(value="SMSCache", key="{#smscode}")   
-	public SMSDto findSMSCodeUser(String smscodeusername) throws Exception {
+	public SMSDto findSMSCodeUser(String smscode) throws Exception {
 		SMSDto smsObj = null;
 		try{
 	    	System.out.println("-----------------------------------------------------------");
-	    	System.out.println("find...:: USERNAME_NEW :: "+ smscodeusername);
+	    	System.out.println("find...:: USERNAME_NEW :: "+ smscode);
 	    	System.out.println("-----------------------------------------------------------");
 			Thread.sleep(1000); 
 	     
-			smsObj = storeSMS.get(smscodeusername);
+			smsObj = storeSMS.get(smscode);
 			if(smsObj != null) {
-				if(smsObj.getSmsCodeUsername().equals(smscodeusername)) {
+				if(smsObj.getSmsCodeUsername().equals(smscode)) {
 					System.out.println("Result FIND  ...:: FOUND:: ");
 					return smsObj;
 				}
