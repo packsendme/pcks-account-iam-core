@@ -31,7 +31,7 @@ public class SMSCache {
     private CacheManager cacheManager;   
     
 	
-	@Cacheable(value="SMSCache", key="{#smsCodeUsername}")    
+	@Cacheable(value="SMSCache", key="{#smscode}")    
 	public SMSDto createSMSCodeUser(String smsCodeUsername) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
@@ -63,7 +63,7 @@ public class SMSCache {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMSCache", key="{#smscodeusername}")   
+	@Cacheable(value="SMSCache", key="{#smscode}")   
 	public SMSDto findSMSCodeUser(String smscodeusername) throws Exception {
 		SMSDto smsObj = null;
 		try{
