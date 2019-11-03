@@ -61,7 +61,7 @@ public class UserService {
 		SMSDto smsDto = null;
 		entityFind.setUsername(username);
 		try {
-			String smsCodeUsername = username+smsCode;
+			String smsCodeUsername = usernameNew+smsCode;
 			smsDto = smsObj.findSMSCodeUser(smsCodeUsername);
 			
 			if(smsDto != null){
