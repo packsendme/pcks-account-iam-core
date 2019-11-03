@@ -31,11 +31,11 @@ public class SMSCache {
     private CacheManager cacheManager;   
     
 	
-	@Cacheable(value="SMSCache", key="{#username,#smsCode}")    
-	public SMSDto createSMSCodeUser(String username, String smsCode) throws Exception {
+	@Cacheable(value="SMSCache", key="{#smsCodeUsername}")    
+	public SMSDto createSMSCodeUser(String smsCodeUsername) throws Exception {
 		Timestamp timeCreate = new Timestamp(System.currentTimeMillis());
 		System.out.println("-----------------------------------------");
-		System.out.println("CreateCache--Username :: "+ username +" - "+ smsCode);
+		System.out.println("CreateCache--Username+SMS :: "+ smsCodeUsername);
         System.out.println("CreateCache-Username HOURS/MINUTES :: "+ timeCreate.getHours() +" "+timeCreate.getMinutes());
 		SMSDto smsObj = null;
 
@@ -43,16 +43,16 @@ public class SMSCache {
 			System.out.println("CreateCache-- Creating :: ");
             Thread.sleep(1000); 
         
-			smsObj = storeSMS.get(username);
+			smsObj = storeSMS.get(smsCodeUsername);
 			if(smsObj != null) {
-				System.out.println("find... :: "+ username);
-				storeSMS.remove(username);
+				System.out.println("find... :: "+ smsCodeUsername);
+				storeSMS.remove(smsCodeUsername);
 				//evict(smsObj.getUsername(),smsObj.getSmsCode());
 			}
 			else {
-				storeSMS.put(username,new SMSDto(smsCode, username, timeCreate.getTime()));
-				smsObj = storeSMS.get(username);
-				System.out.println("CreateCache-Username ...:: OK :: smsCode "+ smsCode);
+				storeSMS.put(smsCodeUsername,new SMSDto(smsCodeUsername, timeCreate.getTime()));
+				smsObj = storeSMS.get(smsCodeUsername);
+				System.out.println("CreateCache-Username ...:: OK :: smsCode "+ smsCodeUsername);
 				System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
 			}
 		}
@@ -63,25 +63,24 @@ public class SMSCache {
 		return smsObj;
 	}
 	
-	@Cacheable(value="SMSCache", key="{#username,#smsCode}")   
-	public SMSDto findSMSCodeUser(String username, String smsCode) throws Exception {
+	@Cacheable(value="SMSCache", key="{#smscodeusername}")   
+	public SMSDto findSMSCodeUser(String smscodeusername) throws Exception {
 		SMSDto smsObj = null;
 		try{
 	    	System.out.println("-----------------------------------------------------------");
-	    	System.out.println("find...:: USERNAME_NEW :: "+ username);
-			System.out.println("find...:: SMS :: "+ smsCode);
+	    	System.out.println("find...:: USERNAME_NEW :: "+ smscodeusername);
 	    	System.out.println("-----------------------------------------------------------");
 			Thread.sleep(1000); 
 	     
-			smsObj = storeSMS.get(username);
+			smsObj = storeSMS.get(smscodeusername);
 			if(smsObj != null) {
-				if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smsCode)) {
+				if(smsObj.getSmsCodeUsername().equals(smscodeusername)) {
 					System.out.println("Result FIND  ...:: FOUND:: ");
 					return smsObj;
 				}
 				else {
 					smsObj = null;
-					System.out.println("Result FIND  ...:: 	NOT-FOUND:: "+ smsObj.getUsername());
+					System.out.println("Result FIND  ...:: 	NOT-FOUND:: "+ smsObj.getSmsCodeUsername());
 					return smsObj;
 				}
 			}
@@ -99,35 +98,11 @@ public class SMSCache {
 		return smsObj;
 	}
 	
-		/*
-		if(smsObj != null) {
-
-			if(smsObj.getUsername().equals(username) && smsObj.getSmsCode().equals(smscode)) {
-		    	System.out.println("find...:: FOUND:: "+ smsObj.getUsername().equals(username));
-		    	storeSMS.remove(username);
-		    	evict(smsObj.getUsername(),smsObj.getSmsCode());
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			}
-			else {
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				System.out.println("Result Validation ...:: NOT-FOUND:: ");
-		    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				smsObj = null;
-				return smsObj;			
-			}
-		}
-		else{
-	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.println("Result FIND  ...:: NOT-FOUND:: ");
-	    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			smsObj = null;
-			return smsObj;
-		}*/
-	
-		
+			
 	
     //@Scheduled(cron = "0/55 * * * * *")
 	//@Scheduled(cron = "0 * * * * *")
+	
 	@Scheduled(fixedRate = 1000)
 	public void checkCacheDelete(){
 		Timestamp timestampCache = new Timestamp(System.currentTimeMillis());
@@ -145,13 +120,12 @@ public class SMSCache {
        	   if(minutes >= 1) {
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        		   System.out.println("CHECK CACHE DELETE -- "+ minutes);
-       		   System.out.println("checkCacheDelete-Username ::"+ smsObj.getUsername());
-       		   System.out.println("checkCacheDelete-smsCode ::"+ smsObj.getSmsCode());
+       		   System.out.println("checkCacheDelete-UsernameSMS ::"+ smsObj.getSmsCodeUsername());
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
        		   storeSMS.remove(itr);
        		   itr.remove();
-       		   deleteCacheSMS(smsObj.getUsername());
+       		   deleteCacheSMS(smsObj.getSmsCodeUsername());
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
        	   }
     	}
@@ -162,8 +136,5 @@ public class SMSCache {
     	ehcache.remove(id, true);
     	//ehcache.removeAll();
     }
-    
-
-
-		
+    		
 }

@@ -57,24 +57,21 @@ public class UserService {
 
 	
 	
-	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smscode, String dtAction) {
+	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smsCode, String dtAction) {
 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		UserModel entityFind = new UserModel();
 		SMSDto smsDto = null;
 		entityFind.setUsername(username);
 		try {
-			
-			smsDto = smsObj.findSMSCodeUser(usernameNew, smscode);
+			String smsCodeUsername = username+smsCode;
+			smsDto = smsObj.findSMSCodeUser(smsCodeUsername);
 			
 			if(smsDto != null){
-				System.out.println("USERNAME "+ smsDto.getUsername());
-				System.out.println("SMSCODE "+ smsDto.getSmsCode());
-				
+				System.out.println("USERNAME-CODE "+ smsDto.getSmsCodeUsername());
 				System.out.println("USERNAME_NEW "+ usernameNew);
-				System.out.println("SMSCODE "+ smscode);
 				
-				if(smsDto.getUsername().equals(usernameNew) && smsDto.getSmsCode().equals(smscode)) {
-					System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getUsername() +" - "+smsDto.getSmsCode());
+				if(smsDto.getSmsCodeUsername().equals(smsCodeUsername)) {
+					System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getSmsCodeUsername());
 
 					UserModel entity = userDAO.find(entityFind);
 					if(entity != null) {

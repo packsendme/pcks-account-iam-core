@@ -40,7 +40,8 @@ public class UserFirstAccessService {
 			// FirstAccess: User does not exist in user base that generator SMSCode
 			if(userFind == null) {
 				String smsCode = smscodeObj.generateSMSCode();
-				SMSDto sms = smsObj.createSMSCodeUser(username,smsCode);
+				String smsCodeUsername = username+smsCode;
+				SMSDto sms = smsObj.createSMSCodeUser(smsCodeUsername);
 				if(sms != null) {
 					Response<SMSDto> responseSMS = new Response<SMSDto>(0, HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), sms);
 					return new ResponseEntity<>(responseSMS, HttpStatus.OK);
@@ -77,12 +78,13 @@ public class UserFirstAccessService {
 	}
 	
 	@SuppressWarnings("unused")
-	public ResponseEntity<?> findSMSCodeToFirstAccess(String username, String smscode) throws Exception {
+	public ResponseEntity<?> findSMSCodeToFirstAccess(String username, String smsCode) throws Exception {
 		Response<UserModel> responseObj = new Response<UserModel>(0, HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		SMSDto smsDto = null;
 
 		try {
-			smsDto = smsObj.findSMSCodeUser(username,smscode);
+			String smsCodeUsername = username+smsCode;
+			smsDto = smsObj.findSMSCodeUser(smsCodeUsername);
 			if(smsDto == null) {
 				System.out.println(" RESULT findSMSCodeToFirstAccess IS "+ HttpStatus.NOT_FOUND);
 				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
@@ -98,12 +100,5 @@ public class UserFirstAccessService {
 		}
 		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
-
-
-	private ResponseEntity<?> extracted() {
-		return null;
-	}
-	
 		
 }
