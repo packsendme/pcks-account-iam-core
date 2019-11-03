@@ -100,6 +100,5 @@ public class UserFirstAccessService {
 		}
 		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
 		
 }
