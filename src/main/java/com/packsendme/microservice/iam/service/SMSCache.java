@@ -149,7 +149,7 @@ public class SMSCache {
        		   System.out.println("checkCacheDelete-smsCode ::"+ smsObj.getSmsCode());
        		   System.out.println("checkCacheDelete-Username HOURS/MINUTES :: "+ timestampCache.getHours() +" "+timestampCache.getMinutes());
        		   System.out.println("checkCacheDelete-Minutes "+ minutes);
-       		   //storeSMS.remove(itr);
+       		   storeSMS.remove(itr);
        		   itr.remove();
        		   deleteCacheSMS(smsObj.getUsername());
        		   System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
