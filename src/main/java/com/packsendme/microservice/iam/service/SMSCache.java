@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -130,10 +131,13 @@ public class SMSCache {
        	   }
     	}
     }
-  
-    public void deleteCacheSMS(Object id){
-    	Ehcache ehcache = cacheManager.getEhcache("SMSCache");
-    	ehcache.remove(id, true);
+	
+    @CacheEvict(value="SMSCache",key = "{#smscode}")
+	public void deleteCacheSMS(String smscode){
+		   System.out.println("DELETE CACHE DELETE -- ");
+
+//    	Ehcache ehcache = cacheManager.getEhcache("SMSCache");
+//    	ehcache.remove(id, true);
     	//ehcache.removeAll();
     }
     		
