@@ -13,8 +13,8 @@ import com.packsendme.lib.common.constants.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
 import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.controller.AccountClient;
+import com.packsendme.microservice.iam.controller.SMSCodeClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
-import com.packsendme.microservice.iam.dto.SMSDto;
 import com.packsendme.microservice.iam.dto.UserDto;
 import com.packsendme.microservice.iam.repository.UserModel;
 
@@ -29,8 +29,8 @@ public class UserService {
 	AccountClient accountCliente;
 
 	@Autowired
-	SMSCache smsObj;
-	
+	SMSCodeClient smscodeClient;
+
 	
 	@Autowired
 	ConvertFormat formatObj;
@@ -56,59 +56,47 @@ public class UserService {
 	}
 	
 	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smsCode, String dtAction) {
-		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
-		UserModel entityFind = new UserModel();
-		SMSDto smsDto = null;
-		entityFind.setUsername(username);
-		try {
-			String smsCodeUsername = usernameNew+smsCode;
-			smsDto = smsObj.findSMSCodeUser(smsCodeUsername);
-			
-			if(smsDto != null){
-				System.out.println("USERNAME-CODE "+ smsDto.getSmsCodeUsername());
-				System.out.println("USERNAME_NEW "+ usernameNew);
-				
-				if(smsDto.getSmsCodeUsername().equals(smsCodeUsername)) {
-					System.out.println(" ===== VALOR CACHE ====== "+ smsDto.getSmsCodeUsername());
+		Response<UserModel> responseUpdateObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
+		Response<UserModel> responseSMSObj = new Response<UserModel>(0,HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 
-					UserModel entity = userDAO.find(entityFind);
-					if(entity != null) {
-						entity.setUsername(usernameNew);
-						entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY);
+		try {
+			ResponseEntity<?> opResultSMS = smscodeClient.validateSMSCode(username, smsCode);
+			
+			if(opResultSMS.getStatusCode() == HttpStatus.FOUND) {
+				
+				UserModel entityFind = new UserModel();
+				entityFind.setUsername(username);
+				UserModel entity = userDAO.find(entityFind);
+
+				if(entity != null) {
+					entity.setUsername(usernameNew);
+					entity.setActivationKey(MicroservicesConstants.ACTIVATIONKEY);
+					entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
+					userDAO.update(entity);
+					
+					// Call AccountMicroservice - Update Username - Account
+					ResponseEntity<?> opResultAccount = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
+					if(opResultAccount.getStatusCode() == HttpStatus.OK) {
+						return new ResponseEntity<>(responseUpdateObj, HttpStatus.OK);
+					}
+					// Erro AccountService - Compensaçao de resultado
+					else {
+						entity.setUsername(username);
 						entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
 						userDAO.update(entity);
-						// Call AccountMicroservice - Update Username - Account
-						ResponseEntity<?> opResultAccount = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
-						if(opResultAccount.getStatusCode() == HttpStatus.OK) {
-							return new ResponseEntity<>(responseObj, HttpStatus.OK);
-						}
-						// Erro AccountService - Compensaçao de resultado
-						else {
-							entity.setUsername(username);
-							entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
-							userDAO.update(entity);
-							return new ResponseEntity<>(responseObj, HttpStatus.FORBIDDEN);
-						}
-					}
-					else {
-						return new ResponseEntity<>(responseObj, HttpStatus.FORBIDDEN);
+						return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 				}
-				else{
-					return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				else {
+					return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
 				}
-			} // Erro SMSCODE Not Found
+			}
 			else{
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(responseSMSObj, HttpStatus.NOT_FOUND);
 			}
 		}
 		catch (Exception e) {
-		//	UserModel entityRollback = new UserModel();
-	//		entityRollback.setUsername(usernameNew);
-	//		UserModel entity = userDAO.find(entityRollback);
-	//		entity.setUsername(username);
-	//		userDAO.update(entity);
-			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

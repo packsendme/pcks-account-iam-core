@@ -1,7 +1,6 @@
 package com.packsendme.microservice.iam.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,11 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.packsendme.lib.common.constants.HttpExceptionPackSend;
-import com.packsendme.lib.common.response.Response;
 import com.packsendme.microservice.iam.dto.UserDto;
-import com.packsendme.microservice.iam.repository.UserModel;
-import com.packsendme.microservice.iam.service.SMSCache;
 import com.packsendme.microservice.iam.service.UserFirstAccessService;
 import com.packsendme.microservice.iam.service.UserService;
 
@@ -28,10 +23,6 @@ public class UserController {
 	@Autowired
 	private UserFirstAccessService firstAccessService;
 
-	
-	@Autowired
-	private SMSCache userSMSO;
-	
 
 	//** BEGIN OPERATION: USER FIRST ACCESS *************************************************//
 	
@@ -42,13 +33,6 @@ public class UserController {
 		return firstAccessService.findUserToFirstAccess(username,dtAction);
 	}
 
-	@GetMapping("/iam/identity/sms/{username}/{smscode}")
-	public ResponseEntity<?> validateSMSCodeFirstUserAccess(@Validated @PathVariable("username") String username, 
-			@Validated @PathVariable("smscode") String smscode) throws Exception {
-		return firstAccessService.findSMSCodeToFirstAccess(username,smscode);
-	}
-	
-	
 	@PutMapping("/iam/identity/{username}/{password}/{dtAction}")
 	public ResponseEntity<?> createUser(@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("password") String password,
@@ -82,14 +66,6 @@ public class UserController {
  	@PutMapping("/iam/manager/")
 	public ResponseEntity<?> changePasswordToUser(@Validated @RequestBody UserDto user) {
 		return userService.updatePasswordByUsername(user);
-	}
- 	
- 	@DeleteMapping("/iam/manager/sms/{username}")
-	public ResponseEntity<?> deleteSMSCode(@Validated @PathVariable("username") String username) {
- 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.NOT_FOUND_SMS_CODE.getAction(), null);
- 		userSMSO.deleteCacheSMS(username);
- 		return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
- 		
 	}
 
 }
