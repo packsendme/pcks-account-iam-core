@@ -11,9 +11,8 @@ import com.packsendme.lib.common.constants.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
 import com.packsendme.lib.utility.ConvertFormat;
-import com.packsendme.microservice.iam.component.GeneratorSMSCode;
+import com.packsendme.microservice.iam.controller.SMSCodeClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
-import com.packsendme.microservice.iam.dto.SMSDto;
 import com.packsendme.microservice.iam.repository.UserModel;
 
 @Service
@@ -21,15 +20,12 @@ public class UserFirstAccessService {
 
 	@Autowired
 	UserDAO userDAO;
-	
-	@Autowired
-	SMSCache smsObj;
-	
-	@Autowired
-	GeneratorSMSCode smscodeObj;
-	
+		
 	@Autowired
 	ConvertFormat formatObj;
+	
+	@Autowired
+	SMSCodeClient smscode;
 	
 	public ResponseEntity<?> findUserToFirstAccess(String username, String dtAction) {
 		UserModel userFind = new UserModel();
@@ -37,17 +33,16 @@ public class UserFirstAccessService {
 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.USERNAME_VALIDATE_ACCESS.getAction(), userFind);
 		try{
 			userFind = userDAO.find(userFind);
-			// FirstAccess: User does not exist in user base that generator SMSCode
+			
+			// FirstAccess: User/phonenumber does not exist in  DATABASE, will be create new SMSCode
 			if(userFind == null) {
-				String smsCode = smscodeObj.generateSMSCode();
-				String smsCodeUsername = username+smsCode;
-				SMSDto sms = smsObj.createSMSCodeUser(smsCodeUsername);
-				if(sms != null) {
-					Response<SMSDto> responseSMS = new Response<SMSDto>(0, HttpExceptionPackSend.GENERATOR_SMSCODE.getAction(), sms);
-					return new ResponseEntity<>(responseSMS, HttpStatus.OK);
+				ResponseEntity<?> opResultSMS = smscode.generatorSMSCode(username);
+				if(opResultSMS.getStatusCode() == HttpStatus.ACCEPTED) {
+					return new ResponseEntity<>(responseObj, HttpStatus.OK);
 				}
-				else
-					return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);		
+				else {
+					return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);	
+				}
 			}
 			// User already exists in the database not first User Access go to Login
 			else {
@@ -76,29 +71,5 @@ public class UserFirstAccessService {
 			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@SuppressWarnings("unused")
-	public ResponseEntity<?> findSMSCodeToFirstAccess(String username, String smsCode) throws Exception {
-		Response<UserModel> responseObj = new Response<UserModel>(0, HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
-		SMSDto smsDto = null;
-
-		try {
-			String smsCodeUsername = username+smsCode;
-			smsDto = smsObj.findSMSCodeUser(smsCodeUsername);
-			if(smsDto == null) {
-				System.out.println(" RESULT findSMSCodeToFirstAccess IS "+ HttpStatus.NOT_FOUND);
-				return new ResponseEntity<>(responseObj, HttpStatus.NOT_FOUND);
-			}
-			else if(smsDto != null){
-				System.out.println(" RESULT findSMSCodeToFirstAccess IS "+ HttpStatus.FOUND);
-				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
-			}
-		}
-		catch (Exception e) {
-			System.out.println("EXCEPTION ERROR"+ e);
-			return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<>(responseObj, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-		
+			
 }
