@@ -14,7 +14,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 5000
+            timeoutInMilliseconds: 160000000
     default:
       coreSize: 20
       maximumSize: 500
