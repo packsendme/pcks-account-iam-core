@@ -4,12 +4,10 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.core.aggregation.VariableOperators.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
 import com.packsendme.lib.common.constants.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
@@ -36,18 +34,11 @@ public class UserService {
 	
 	@Autowired
 	ConvertFormat formatObj;
+	
 	public ResponseEntity<?> findUserToLogin(String username, String password) {
 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), null);
 		UserModel entity = new UserModel(); 
-		Gson gson = new Gson();
-		
-		
-		
-		// Call AccountMicroservice - Update Username - Account
-		ResponseEntity<?> opResultAccount1 = accountCliente.loadFirstNameAccount(username);
-		System.out.print(" 1 MAP MAP -------------------->>> "+ opResultAccount1.getStatusCode());
-
-		
+		//Gson gson = new Gson();
 		
 		try {
 			entity.setUsername(username);
@@ -55,7 +46,6 @@ public class UserService {
 			entity = userDAO.find(entity);
 			if(entity != null) {
 				
-				// Call AccountMicroservice - Update Username - Account
 				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
 				System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
 
