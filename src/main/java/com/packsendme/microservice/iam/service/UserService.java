@@ -45,6 +45,7 @@ public class UserService {
 			entity.setPassword(password);
 			entity = userDAO.find(entity);
 			if(entity != null) {
+				
 				// Call AccountMicroservice - Update Username - Account
 				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
 				if(opResultAccount.getStatusCode() == HttpStatus.FOUND) {

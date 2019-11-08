@@ -2,8 +2,8 @@ feign:
   client:
     config:
       feignName:
-        connectTimeout: 160000000
-        readTimeout: 160000000
+        connectTimeout: 100000
+        readTimeout: 100000
         loggerLevel: full
 
 
@@ -14,7 +14,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 160000000
+            timeoutInMilliseconds: 1
     default:
       coreSize: 20
       maximumSize: 500
