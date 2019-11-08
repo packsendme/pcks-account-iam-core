@@ -40,6 +40,15 @@ public class UserService {
 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), null);
 		UserModel entity = new UserModel(); 
 		Gson gson = new Gson();
+		
+		
+		
+		// Call AccountMicroservice - Update Username - Account
+		ResponseEntity<?> opResultAccount1 = accountCliente.loadFirstNameAccount(username);
+		System.out.print(" 1 MAP MAP -------------------->>> "+ opResultAccount1.getStatusCode());
+
+		
+		
 		try {
 			entity.setUsername(username);
 			entity.setPassword(password);
@@ -48,12 +57,13 @@ public class UserService {
 				
 				// Call AccountMicroservice - Update Username - Account
 				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
-				if(opResultAccount.getStatusCode() == HttpStatus.FOUND) {
+				System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
+
+			/*if(opResultAccount.getStatusCode() == HttpStatus.FOUND) {
 					String json = opResultAccount.getBody().toString();
 					Map map = gson.fromJson(json, Map.class);
 					System.out.print(" MAP MAP -------------------->>> "+ map);
-
-				}
+				}*/
 				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
