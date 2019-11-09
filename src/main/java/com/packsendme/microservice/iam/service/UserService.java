@@ -47,12 +47,14 @@ public class UserService {
 			entity = userDAO.find(entity);
 			if(entity != null) {
 				
-			ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
+			ResponseEntity<NamesAccountDto> opResultAccount = accountCliente.loadFirstNameAccount(username);
 			System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
 
 			if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
 					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
+					System.out.println(" <<< -----  N A M E - JSON -->> "+ json);
+
 					System.out.println(" <<< -----  N A M E - FIRST -->> "+ namesDto.getFirstName());
 					System.out.println(" <<< -----  N A M E - LAST -->> "+ namesDto.getLastName());
 
