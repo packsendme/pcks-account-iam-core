@@ -1,6 +1,7 @@
 package com.packsendme.microservice.iam.service;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.packsendme.lib.common.constants.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
@@ -38,7 +40,7 @@ public class UserService {
 	public ResponseEntity<?> findUserToLogin(String username, String password) {
 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), null);
 		UserModel entity = new UserModel(); 
-		//Gson gson = new Gson();
+		Gson gson = new Gson();
 		
 		try {
 			entity.setUsername(username);
@@ -46,14 +48,14 @@ public class UserService {
 			entity = userDAO.find(entity);
 			if(entity != null) {
 				
-				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
-				System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
+			ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
+			System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
 
-			/*if(opResultAccount.getStatusCode() == HttpStatus.FOUND) {
+			if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
 					Map map = gson.fromJson(json, Map.class);
 					System.out.print(" MAP MAP -------------------->>> "+ map);
-				}*/
+				}
 				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
