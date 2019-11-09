@@ -56,12 +56,11 @@ public class UserService {
 					String json = opResultAccount.getBody().toString();
 					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json);
 
-				//	NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
-					//Object mapper instance
-					ObjectMapper mapper = new ObjectMapper();
+					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
+					//ObjectMapper mapper = new ObjectMapper();
 					 
 					//Convert JSON to POJO
-					NamesAccountDto namesDto = mapper.readValue(json, NamesAccountDto.class);
+					//NamesAccountDto namesDto = mapper.readValue(json, NamesAccountDto.class);
 					System.out.println(" <<< -----  N A M E - FIRST -->> "+ namesDto.getFirstName());
 
 				}
