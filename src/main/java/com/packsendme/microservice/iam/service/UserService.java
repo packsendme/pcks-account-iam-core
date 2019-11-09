@@ -56,7 +56,6 @@ public class UserService {
 					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json);
 
 					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
-					//System.out.println(" <<< -----  N A M E - JSON -->> "+ json);
 
 					System.out.println(" <<< -----  N A M E - FIRST -->> "+ namesDto.getFirstName());
 

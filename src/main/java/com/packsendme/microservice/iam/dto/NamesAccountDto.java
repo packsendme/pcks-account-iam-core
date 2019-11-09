@@ -3,8 +3,8 @@ package com.packsendme.microservice.iam.dto;
 public class NamesAccountDto {
 
 	
-	public String firstName;
-	public String lastName;
+	private String firstName;
+	private String lastName;
 
 	public String getFirstName() {
 		return firstName;
