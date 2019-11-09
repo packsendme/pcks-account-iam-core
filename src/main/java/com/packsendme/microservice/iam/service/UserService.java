@@ -1,8 +1,6 @@
 package com.packsendme.microservice.iam.service;
 
 import java.util.Date;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -17,6 +15,7 @@ import com.packsendme.lib.utility.ConvertFormat;
 import com.packsendme.microservice.iam.controller.AccountClient;
 import com.packsendme.microservice.iam.controller.SMSCodeClient;
 import com.packsendme.microservice.iam.dao.UserDAO;
+import com.packsendme.microservice.iam.dto.NamesAccountDto;
 import com.packsendme.microservice.iam.dto.UserDto;
 import com.packsendme.microservice.iam.repository.UserModel;
 
@@ -53,8 +52,10 @@ public class UserService {
 
 			if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
-					Map map = gson.fromJson(json, Map.class);
-					System.out.print(" MAP MAP -------------------->>> "+ map);
+					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
+					System.out.println(" <<< -----  N A M E - FIRST -->> "+ namesDto.getFirstName());
+					System.out.println(" <<< -----  N A M E - LAST -->> "+ namesDto.getLastName());
+
 				}
 				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
