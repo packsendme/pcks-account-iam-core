@@ -52,14 +52,13 @@ public class UserService {
 			System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
 
 			if(opResultAccount.getStatusCode() == HttpStatus.OK) {
-					String json1 = opResultAccount.getBody().toString();
-					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json1);
+					String json = opResultAccount.getBody().toString();
+					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json);
 
-					NamesAccountDto json = (NamesAccountDto) opResultAccount.getBody();
-					//NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
+					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
 					//System.out.println(" <<< -----  N A M E - JSON -->> "+ json);
 
-					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json.getFirstName());
+					System.out.println(" <<< -----  N A M E - FIRST -->> "+ namesDto.getFirstName());
 
 				}
 				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
