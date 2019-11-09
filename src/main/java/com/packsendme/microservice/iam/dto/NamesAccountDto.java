@@ -1,14 +1,8 @@
 package com.packsendme.microservice.iam.dto;
 
-import java.io.Serializable;
-
-public class NamesAccountDto implements Serializable {
+public class NamesAccountDto {
 
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	public String firstName;
 	public String lastName;
 
