@@ -47,16 +47,19 @@ public class UserService {
 			entity = userDAO.find(entity);
 			if(entity != null) {
 				
-			ResponseEntity<NamesAccountDto> opResultAccount = accountCliente.loadFirstNameAccount(username);
+			ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
+			
 			System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
 
 			if(opResultAccount.getStatusCode() == HttpStatus.OK) {
-					String json = opResultAccount.getBody().toString();
-					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
-					System.out.println(" <<< -----  N A M E - JSON -->> "+ json);
+					String json1 = opResultAccount.getBody().toString();
+					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json1);
 
-					System.out.println(" <<< -----  N A M E - FIRST -->> "+ namesDto.getFirstName());
-					System.out.println(" <<< -----  N A M E - LAST -->> "+ namesDto.getLastName());
+					NamesAccountDto json = (NamesAccountDto) opResultAccount.getBody();
+					//NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
+					//System.out.println(" <<< -----  N A M E - JSON -->> "+ json);
+
+					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json.getFirstName());
 
 				}
 				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
