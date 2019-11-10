@@ -38,23 +38,25 @@ public class UserService {
 	ConvertFormat formatObj;
 	
 	public ResponseEntity<?> findUserToLogin(String username, String password) {
-		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), null);
+		Response<UserDto> responseObj = new Response<UserDto>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), null);
 		UserModel entity = new UserModel(); 
 		Gson gson = new Gson();
+		UserDto userDto = null;
 		
 		try {
 			entity.setUsername(username);
 			entity.setPassword(password);
 			entity = userDAO.find(entity);
 			if(entity != null) {
+				userDto = new UserDto(entity);
 				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
 				if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
 					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
-					entity.setFirstName(namesDto.getFirstName());
-					entity.setLastName(namesDto.getLastName());
+					userDto.setFirstName(namesDto.getFirstName());
+					userDto.setLastName(namesDto.getLastName());
 				}
-				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
+				responseObj = new Response<UserDto>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), userDto);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
 			}
 			else {

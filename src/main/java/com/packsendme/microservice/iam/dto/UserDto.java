@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import org.springframework.data.annotation.Id;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.packsendme.microservice.iam.repository.UserModel;
+
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 public class UserDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -12,6 +16,8 @@ public class UserDto implements Serializable {
     private String id;
 	private String username;
     private String password;
+    private String firstName;
+    private String lastName;
     private boolean activated;
     private String activationKey;
     private boolean resetPasswordKey;
@@ -21,17 +27,28 @@ public class UserDto implements Serializable {
     public UserDto() {
 	}
 
-	public UserDto(String username, String password, boolean activated, String activationKey,
+	public UserDto(String username, String password, String firstName, String lastName, boolean activated, String activationKey,
 			boolean resetPasswordKey, String dateOperation) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.activated = activated;
+		
+		this.firstName = firstName;
+		this.lastName = lastName;
+
 		this.activationKey = activationKey;
 		this.resetPasswordKey = resetPasswordKey;
 		this.dateOperation = dateOperation;
-		
 	}
+	
+	public UserDto(UserModel userModel) {
+		super();
+		this.username = userModel.getUsername();
+		this.activated = userModel.getActivated();
+		this.activationKey = userModel.getActivationKey();
+	}
+
 
 	public String getUsername() {
 		return username;
@@ -87,6 +104,22 @@ public class UserDto implements Serializable {
 
 	public void setDateOperation(String dateOperation) {
 		this.dateOperation = dateOperation;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }
