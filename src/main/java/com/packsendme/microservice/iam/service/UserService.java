@@ -47,22 +47,12 @@ public class UserService {
 			entity.setPassword(password);
 			entity = userDAO.find(entity);
 			if(entity != null) {
-				
-			ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
-			
-			System.out.print(" 2 MAP MAP -------------------->>> "+ opResultAccount.getStatusCode());
-
-			if(opResultAccount.getStatusCode() == HttpStatus.OK) {
+				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
+				if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
-					System.out.println(" <<< -----  N A M E - FIRST -->> "+ json);
-
 					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
-					//ObjectMapper mapper = new ObjectMapper();
-					 
-					//Convert JSON to POJO
-					//NamesAccountDto namesDto = mapper.readValue(json, NamesAccountDto.class);
-					System.out.println(" <<< -----  N A M E - FIRST -->> "+ namesDto.getFirstName());
-
+					entity.setFirstName(namesDto.getFirstName());
+					entity.setLastName(namesDto.getLastName());
 				}
 				responseObj = new Response<UserModel>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);

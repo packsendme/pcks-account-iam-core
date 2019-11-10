@@ -18,6 +18,8 @@ public class UserModel implements Serializable {
     private String id;
 	private String username;
     private String password;
+    private String firstName;
+    private String lastName;
     private boolean activated;
     private String activationKey;
     private boolean resetPasswordKey;
@@ -28,10 +30,12 @@ public class UserModel implements Serializable {
     public UserModel() {
 	}
 
-	public UserModel(String username, String password, boolean activated, String activationKey,
+	public UserModel(String username, String password, String firstName, String lastName, boolean activated, String activationKey,
 			boolean resetPasswordKey, Date dateCreate) {
 		super();
 		this.username = username;
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
 		this.password = password;
 		this.activated = activated;
 		this.activationKey = activationKey;
@@ -101,6 +105,22 @@ public class UserModel implements Serializable {
 
 	public void setDateUpdate(Date dateUpdate) {
 		this.dateUpdate = dateUpdate;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 
