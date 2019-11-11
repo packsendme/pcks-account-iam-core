@@ -72,12 +72,14 @@ public class UserService {
 	public ResponseEntity<?> updateUsernameByValidateSMSCode(String username, String usernameNew, String smsCode, String dtAction) {
 		Response<UserModel> responseUpdateObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		Response<UserModel> responseSMSObj = new Response<UserModel>(0,HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
-
+		System.out.println(" Begin updateUsernameByValidateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 		try {
 			ResponseEntity<?> opResultSMS = smscodeClient.validateSMSCode(username, smsCode);
-			
+			System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
+
 			if(opResultSMS.getStatusCode() == HttpStatus.FOUND) {
-				
+				System.out.println(" Start validateSMSCode  "+ opResultSMS.getStatusCode());
+
 				UserModel entityFind = new UserModel();
 				entityFind.setUsername(username);
 				UserModel entity = userDAO.find(entityFind);
@@ -90,11 +92,15 @@ public class UserService {
 					
 					// Call AccountMicroservice - Update Username - Account
 					ResponseEntity<?> opResultAccount = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
+					System.out.println(" Start changeUsernameForAccount  "+ opResultAccount.getStatusCode());
+
 					if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 						return new ResponseEntity<>(responseUpdateObj, HttpStatus.OK);
 					}
 					// Erro AccountService - Compensaçao de resultado
 					else {
+						System.out.println(" Compensaçao IAM  "+ opResultAccount.getStatusCode());
+
 						entity.setUsername(username);
 						entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
 						userDAO.update(entity);
@@ -110,6 +116,7 @@ public class UserService {
 			}
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
