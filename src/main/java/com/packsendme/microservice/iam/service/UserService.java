@@ -69,7 +69,7 @@ public class UserService {
 		}
 	}
 	
-	public ResponseEntity<?> getSMSCodeToUpdateUser(String username, String usernameNew, String smsCode, String dtAction) {
+	public ResponseEntity<?> updateUsernameByValidateSMSCode(String username, String usernameNew, String smsCode, String dtAction) {
 		Response<UserModel> responseUpdateObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		Response<UserModel> responseSMSObj = new Response<UserModel>(0,HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 
