@@ -55,11 +55,11 @@ public class UserController {
 			return userService.cancelUserAccessByUsername(username,dtAction);
 	}
 	
- 	@GetMapping("/iam/manager/sms/{username}/{usernamenew}/{smscode}/{dtAction}")
-	public ResponseEntity<?> validateSMSCodeToUpdateUser(@Validated @PathVariable("username") String username, 
+ 	@PutMapping("/iam/manager/{username}/{usernamenew}/{smscode}/{dtAction}")
+	public ResponseEntity<?> changeUsername(@Validated @PathVariable("username") String username, 
 			@PathVariable("usernamenew") String usernamenew,@PathVariable("smscode") String smscode,
 			@PathVariable("dtAction") String dtAction) {
-			return userService.getSMSCodeToUpdateUser(username, usernamenew, smscode, dtAction);
+			return userService.updateUsernameByValidateSMSCode(username, usernamenew, smscode, dtAction);
 	}
 
  
