@@ -74,7 +74,7 @@ public class UserService {
 		Response<UserModel> responseSMSObj = new Response<UserModel>(0,HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		System.out.println(" Begin updateUsernameByValidateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 		try {
-			ResponseEntity<?> opResultSMS = smscodeClient.validateSMSCode(username, smsCode);
+			ResponseEntity<?> opResultSMS = smscodeClient.validateSMSCode(usernameNew, smsCode);
 			System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 
 			if(opResultSMS.getStatusCode() == HttpStatus.FOUND) {
