@@ -85,15 +85,12 @@ public class UserService {
 				System.out.print(" +++++++++++++++  ");
 				System.out.print(" getMessage  "+ e.getMessage());
 				
-/*				if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
+				if (e.getMessage() == HttpStatus.NOT_FOUND.getReasonPhrase()) {
 					return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
-
 				}
 				else {
-				*/
 					return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
-				//}
-				
+				}
 			}
 			
 			if(httpResponse.getStatusCode() == HttpStatus.OK) {
