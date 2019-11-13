@@ -82,7 +82,14 @@ public class UserService {
 				System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 			}
 			catch (Exception e) {
-				return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
+				e.printStackTrace();
+				if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
+					return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
+
+				}
+				else {
+					return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 			}
 			
 			if(httpResponse.getStatusCode() == HttpStatus.OK) {
