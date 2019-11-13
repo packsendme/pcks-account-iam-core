@@ -73,34 +73,20 @@ public class UserService {
 		Response<UserModel> responseUpdateObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		Response<UserModel> responseSMSObj = new Response<UserModel>(0,HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
 		ResponseEntity<?> httpResponse = null;
-		
-		System.out.println(" Begin updateUsernameByValidateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 		try {
 			
 			try {
 				httpResponse = smscodeClient.validateSMSCode(usernameNew, smsCode);
-				System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 			}
 			catch (Exception e) {
-				System.out.println(" hashCode  1  "+ HttpStatus.NOT_FOUND.hashCode());
-
-				System.out.println(" +++++++++++++++  ");
-				System.out.println(" getMessage  1  "+ e.getMessage());
-				System.out.println(" +++++++++++++++  ");
-				System.out.println(" getMessage 2  "+ HttpStatus.NOT_FOUND.getReasonPhrase());
-				System.out.println(" +++++++++++++++  ");
-
-				if (e.getMessage().equals("404"+" "+HttpStatus.NOT_FOUND.getReasonPhrase())) {
+				if (e.getMessage().equals(HttpStatus.NOT_FOUND+" "+HttpStatus.NOT_FOUND.getReasonPhrase())) {
 					return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
 				}
 				else {
 					return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}
-			
 			if(httpResponse.getStatusCode() == HttpStatus.OK) {
-				System.out.println(" Start validateSMSCode  "+ httpResponse.getStatusCode());
-				
 				UserModel entityFind = new UserModel();
 				entityFind.setUsername(username);
 				UserModel entity = userDAO.find(entityFind);
