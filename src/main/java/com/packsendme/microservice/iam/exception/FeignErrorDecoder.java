@@ -19,6 +19,14 @@ public class FeignErrorDecoder implements ErrorDecoder {
 	            	return new ResponseStatusException(HttpStatus.valueOf(response.status()), " ERROR 400"); 
 
 	            }
+	        case 302:
+            {
+            	System.out.println(" FeignErrorDecoder --> 302 ");
+            	
+            	return new ResponseStatusException(HttpStatus.valueOf(response.status()), " ERROR 302"); 
+
+            }
+
 	        case 404:
             {
             	System.out.println(" FeignErrorDecoder --> 404 ");

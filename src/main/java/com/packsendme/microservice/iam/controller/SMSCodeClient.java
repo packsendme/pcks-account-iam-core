@@ -16,7 +16,7 @@ public interface SMSCodeClient {
 	
 
 	@GetMapping("/sms/{username}/{smscode}")
-	@ResponseBody public ResponseEntity<?> validateSMSCode(
+	public ResponseEntity<?> validateSMSCode(
 			@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("smscode") String smscode);
 
