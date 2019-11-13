@@ -47,7 +47,7 @@ public class FeignErrorDecoder implements ErrorDecoder {
 	        }
 
 	        if (response.status() >= 400 && response.status() <= 499) {
-	        	statusText = HttpStatus.NOT_FOUND.toString();
+	        	statusText = HttpStatus.NOT_FOUND.getReasonPhrase();
 	            return new HttpClientErrorException(statusCode, statusText, responseHeaders, responseBody, null);
 	        }
 
