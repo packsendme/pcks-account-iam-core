@@ -22,11 +22,11 @@ public class MicroserviceIAMServerApplication {
 	@LoadBalanced
 	public RestTemplate restTemplate() {
 	    return new RestTemplate();
-	} 
+	} */
 	
 	 @Bean
 	    public FeignErrorDecoder errorDecoder() {
 	        return new FeignErrorDecoder();
 	    }
-	 */
+	 
 }
