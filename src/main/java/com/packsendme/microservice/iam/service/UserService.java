@@ -77,7 +77,7 @@ public class UserService {
 			ResponseEntity<?> opResultSMS = smscodeClient.validateSMSCode(usernameNew, smsCode);
 			System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 
-			if(opResultSMS.getStatusCode() == HttpStatus.FOUND) {
+			if(opResultSMS.getStatusCode() == HttpStatus.OK) {
 				System.out.println(" Start validateSMSCode  "+ opResultSMS.getStatusCode());
 
 				UserModel entityFind = new UserModel();
