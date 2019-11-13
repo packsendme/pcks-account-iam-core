@@ -82,9 +82,8 @@ public class UserService {
 				System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 			}
 			catch (Exception e) {
-				System.out.print(" CODE  "+ e.hashCode());
-				System.out.print(" getCause  "+ e.getCause());
-
+				System.out.print(" +++++++++++++++  ");
+				System.out.print(" getMessage  "+ e.getMessage());
 				
 /*				if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
 					return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
