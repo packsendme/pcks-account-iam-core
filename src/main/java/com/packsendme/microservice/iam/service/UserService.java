@@ -82,7 +82,7 @@ public class UserService {
 				System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 			}
 			catch (Exception e) {
-				System.out.println(" getLocalizedMessage  1  "+ e.getLocalizedMessage());
+				System.out.println(" hashCode  1  "+ HttpStatus.NOT_FOUND.hashCode());
 
 				System.out.println(" +++++++++++++++  ");
 				System.out.println(" getMessage  1  "+ e.getMessage());
@@ -90,7 +90,7 @@ public class UserService {
 				System.out.println(" getMessage 2  "+ HttpStatus.NOT_FOUND.getReasonPhrase());
 				System.out.println(" +++++++++++++++  ");
 
-				if (e.getMessage().equals(HttpStatus.NOT_FOUND.hashCode()+" "+HttpStatus.NOT_FOUND.getReasonPhrase())) {
+				if (e.getMessage().equals("404"+" "+HttpStatus.NOT_FOUND.getReasonPhrase())) {
 					return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
 				}
 				else {
