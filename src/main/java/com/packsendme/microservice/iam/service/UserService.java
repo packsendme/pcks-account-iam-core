@@ -76,12 +76,18 @@ public class UserService {
 		
 		System.out.println(" Begin updateUsernameByValidateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 		try {
-			httpResponse = smscodeClient.validateSMSCode(usernameNew, smsCode);
-			System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
-
+			
+			try {
+				httpResponse = smscodeClient.validateSMSCode(usernameNew, smsCode);
+				System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
+			}
+			catch (Exception e) {
+				return new ResponseEntity<>(responseUpdateObj, HttpStatus.NOT_FOUND);
+			}
+			
 			if(httpResponse.getStatusCode() == HttpStatus.OK) {
 				System.out.println(" Start validateSMSCode  "+ httpResponse.getStatusCode());
-
+				
 				UserModel entityFind = new UserModel();
 				entityFind.setUsername(username);
 				UserModel entity = userDAO.find(entityFind);
@@ -119,7 +125,7 @@ public class UserService {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(responseUpdateObj, httpResponse.getStatusCode());
+			return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
