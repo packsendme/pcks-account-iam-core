@@ -72,13 +72,15 @@ public class UserService {
 	public ResponseEntity<?> updateUsernameByValidateSMSCode(String username, String usernameNew, String smsCode, String dtAction) {
 		Response<UserModel> responseUpdateObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_ACCOUNT.getAction(), null);
 		Response<UserModel> responseSMSObj = new Response<UserModel>(0,HttpExceptionPackSend.FOUND_SMS_CODE.getAction(), null);
+		ResponseEntity<?> httpResponse = null;
+		
 		System.out.println(" Begin updateUsernameByValidateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 		try {
-			ResponseEntity<?> opResultSMS = smscodeClient.validateSMSCode(usernameNew, smsCode);
+			httpResponse = smscodeClient.validateSMSCode(usernameNew, smsCode);
 			System.out.println(" Start validateSMSCode  "+ username +""+usernameNew +""+ smsCode);
 
-			if(opResultSMS.getStatusCode() == HttpStatus.OK) {
-				System.out.println(" Start validateSMSCode  "+ opResultSMS.getStatusCode());
+			if(httpResponse.getStatusCode() == HttpStatus.OK) {
+				System.out.println(" Start validateSMSCode  "+ httpResponse.getStatusCode());
 
 				UserModel entityFind = new UserModel();
 				entityFind.setUsername(username);
@@ -91,15 +93,15 @@ public class UserService {
 					userDAO.update(entity);
 					
 					// Call AccountMicroservice - Update Username - Account
-					ResponseEntity<?> opResultAccount = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
-					System.out.println(" Start changeUsernameForAccount  "+ opResultAccount.getStatusCode());
+					httpResponse = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
+					System.out.println(" Start changeUsernameForAccount  "+ httpResponse.getStatusCode());
 
-					if(opResultAccount.getStatusCode() == HttpStatus.OK) {
+					if(httpResponse.getStatusCode() == HttpStatus.OK) {
 						return new ResponseEntity<>(responseUpdateObj, HttpStatus.OK);
 					}
 					// Erro AccountService - Compensaçao de resultado
 					else {
-						System.out.println(" Compensaçao IAM  "+ opResultAccount.getStatusCode());
+						System.out.println(" Compensaçao IAM  "+ httpResponse.getStatusCode());
 
 						entity.setUsername(username);
 						entity.setDateUpdate(formatObj.convertStringToDate(dtAction));
@@ -117,8 +119,9 @@ public class UserService {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(responseUpdateObj, httpResponse.getStatusCode());
 		}
+		
 	}
 	
 	public ResponseEntity<?> updatePasswordByUsername(UserDto user) {

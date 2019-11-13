@@ -20,16 +20,28 @@ public class FeignErrorDecoder implements ErrorDecoder {
 
 	    @Override
 	    public Exception decode(String methodKey, Response response) {
-	        HttpHeaders responseHeaders = new HttpHeaders();
+	      
+	    	
+	    	HttpHeaders responseHeaders = new HttpHeaders();
 	        response.headers().entrySet().stream()
 	                .forEach(entry -> responseHeaders.put(entry.getKey(), new ArrayList<>(entry.getValue())));
 
 	        HttpStatus statusCode = HttpStatus.valueOf(response.status());
 	        String statusText = response.reason();
+	        
+	        System.out.println("===============================================================");
+	        
+	        System.out.println("  FeignErrorDecoder responseHeaders  "+ responseHeaders);
+	        System.out.println("  FeignErrorDecoder statusCode  "+ statusCode);
+	        System.out.println("  FeignErrorDecoder statusText  "+ statusText);
+
 
 	        byte[] responseBody;
 	        try {
 	            responseBody = IOUtils.toByteArray(response.body().asInputStream());
+		        System.out.println("  FeignErrorDecoder responseBody  "+ responseBody);
+		        System.out.println("===============================================================");
+		
 	        } catch (IOException e) {
 	            throw new RuntimeException("Failed to process response body.", e);
 	        }
