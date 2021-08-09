@@ -1,4 +1,4 @@
-package com.packsendme.microservice.iam.dto;
+package com.packsendme.microservice.account.dto;
 
 public class NamesAccountDto {
 

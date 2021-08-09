@@ -1,4 +1,4 @@
-package com.packsendme.microservice.iam.dao;
+package com.packsendme.microservice.account.dao;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoClientException;
-import com.packsendme.microservice.iam.repository.UserModel;
-import com.packsendme.microservice.iam.repository.UserRepository;
+import com.packsendme.microservice.account.repository.UserModel;
+import com.packsendme.microservice.account.repository.UserRepository;
 
 @Component("userDAO")
 public class UserDAO implements IUserMongo {

@@ -1,4 +1,4 @@
-package com.packsendme.microservice.iam.controller;
+package com.packsendme.microservice.account.controller;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

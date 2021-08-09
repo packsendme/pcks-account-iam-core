@@ -1,8 +1,8 @@
-package com.packsendme.microservice.iam.dao;
+package com.packsendme.microservice.account.dao;
 
 import java.util.List;
 
-import com.packsendme.microservice.iam.repository.UserModel;
+import com.packsendme.microservice.account.repository.UserModel;
 
 public interface IUserMongo {
 

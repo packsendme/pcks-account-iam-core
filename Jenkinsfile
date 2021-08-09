@@ -2,18 +2,18 @@ pipeline {
     agent any
 
     environment {
-        NAME_CONTAINER = "iam-microservice-psm"
-        NAME_IMAGE = "iam-image-psm:1"
-        ID_CONTAINER = null 
+        NAME_CONTAINER = "pcks-account-iam-core"
+        NAME_IMAGE = "pcks-account-iam-img:1"
+        ID_CONTAINER = null
         PORT_CONTAINER = "9093:9093"
     }
 
     stages {
-        
+
         stage('Git Checkout Repositorio') {
             steps {
                 git branch: 'develop',
-                url: 'https://github.com/packsendme/packsendme-iam-server.git'
+                url: 'https://github.com/packsendme/pcks-account-iam-core.git'
             }
         }
         stage('Java Build') {
@@ -21,7 +21,7 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-    
+
         stage("Docker Delopy - Check Container") {
             steps {
                 script {
@@ -30,9 +30,9 @@ pipeline {
                 }
             }
         }
-        
+
         stage("Docker Delopy  - Stop Container") {
-           when { 
+           when {
                allOf {
                         expression { ID_CONTAINER != null }
                         expression { ID_CONTAINER != "" }
@@ -54,6 +54,6 @@ pipeline {
                 }
             }
         }
-        
+
     }
 }

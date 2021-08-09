@@ -1,4 +1,4 @@
-package com.packsendme.microservice.iam.exception;
+package com.packsendme.microservice.account.exception;
 
 import java.io.IOException;
 

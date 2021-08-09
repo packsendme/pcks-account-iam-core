@@ -1,43 +1,54 @@
-package com.packsendme.microservice.iam.repository;
+package com.packsendme.microservice.account.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "User")
-public class UserModel implements Serializable {
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.packsendme.microservice.account.repository.UserModel;
 
-	/**
-	 * 
-	 */
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+public class UserDto implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
     private String id;
 	private String username;
     private String password;
+    private String firstName;
+    private String lastName;
     private boolean activated;
     private String activationKey;
     private boolean resetPasswordKey;
-    private Date dateCreate;
-    private Date dateUpdate;
+    private String dateOperation;
     
     
-    public UserModel() {
+    public UserDto() {
 	}
 
-	public UserModel(String username, String password, boolean activated, String activationKey,
-			boolean resetPasswordKey, Date dateCreate) {
+	public UserDto(String username, String password, String firstName, String lastName, boolean activated, String activationKey,
+			boolean resetPasswordKey, String dateOperation) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.activated = activated;
+		
+		this.firstName = firstName;
+		this.lastName = lastName;
+
 		this.activationKey = activationKey;
 		this.resetPasswordKey = resetPasswordKey;
-		this.dateCreate = dateCreate;
+		this.dateOperation = dateOperation;
 	}
+	
+	public UserDto(UserModel userModel) {
+		super();
+		this.username = userModel.getUsername();
+		this.activated = userModel.getActivated();
+		this.activationKey = userModel.getActivationKey();
+	}
+
 
 	public String getUsername() {
 		return username;
@@ -55,7 +66,7 @@ public class UserModel implements Serializable {
 		this.password = password;
 	}
 
-	public boolean getActivated() {
+	public boolean isActivated() {
 		return activated;
 	}
 
@@ -87,20 +98,28 @@ public class UserModel implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDateCreate() {
-		return dateCreate;
+	public String getDateOperation() {
+		return dateOperation;
 	}
 
-	public void setDateCreate(Date dateCreate) {
-		this.dateCreate = dateCreate;
+	public void setDateOperation(String dateOperation) {
+		this.dateOperation = dateOperation;
 	}
 
-	public Date getDateUpdate() {
-		return dateUpdate;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setDateUpdate(Date dateUpdate) {
-		this.dateUpdate = dateUpdate;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }

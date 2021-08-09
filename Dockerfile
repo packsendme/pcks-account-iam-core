@@ -1,5 +1,5 @@
 
 FROM openjdk:8-jdk-alpine
 EXPOSE 9093
-COPY /target/packsendme-iam-server-0.0.1-SNAPSHOT.jar packsendme-iam-server-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/packsendme-iam-server-0.0.1-SNAPSHOT.jar"]
+COPY /target/pcks-account-iam-core-0.0.1-SNAPSHOT.jar pcks-account-iam-core-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java", "-jar", "/pcks-account-iam-core-0.0.1-SNAPSHOT.jar"]

@@ -1,4 +1,4 @@
-package com.packsendme.microservice.iam;
+package com.packsendme.microservice.account;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
-import com.packsendme.microservice.iam.exception.FeignErrorDecoder;
+import com.packsendme.microservice.account.exception.FeignErrorDecoder;
 
 @SpringBootApplication
 @EnableEurekaClient
