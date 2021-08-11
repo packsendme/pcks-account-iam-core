@@ -6,15 +6,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name="packsendme-sms-server")
+@FeignClient(name="pcks-3rpart-sms-api")
 public interface SMSCodeClient {
 	
-	@GetMapping("/sms/{username}")
+	@GetMapping("/3rpart/sms/{username}")
 	public ResponseEntity<?> generatorSMSCode(
 			@Validated @PathVariable("username") String username);
 	
 
-	@GetMapping("/sms/{username}/{smscode}")
+	@GetMapping("/3rpart/sms/{username}/{smscode}")
 	public ResponseEntity<?> validateSMSCode(
 			@Validated @PathVariable("username") String username, 
 			@Validated @PathVariable("smscode") String smscode);
