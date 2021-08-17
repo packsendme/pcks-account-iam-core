@@ -35,7 +35,7 @@ public class UserFirstAccessService {
 			userFind = userDAO.find(userFind);
 			
 			// FirstAccess: User/phonenumber does not exist in  DATABASE, will be create new SMSCode
-			if(userFind == null) {
+			if(userFind.equals(null)) {
 				ResponseEntity<?> opResultSMS = smscode.generatorSMSCode(username);
 				if(opResultSMS.getStatusCode() == HttpStatus.ACCEPTED) {
 					return new ResponseEntity<>(responseObj, HttpStatus.OK);
