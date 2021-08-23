@@ -13,7 +13,7 @@ import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.generic.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
 import com.packsendme.lib.utility.ConvertFormat;
-import com.packsendme.microservice.account.controller.AccountClient;
+import com.packsendme.microservice.account.controller.CustomerClient;
 import com.packsendme.microservice.account.controller.SMSCodeClient;
 import com.packsendme.microservice.account.dao.UserDAO;
 import com.packsendme.microservice.account.dto.NamesAccountDto;
@@ -28,7 +28,7 @@ public class UserService {
 	UserDAO userDAO;
 	
 	@Autowired
-	AccountClient accountCliente;
+	CustomerClient accountCliente;
 
 	@Autowired
 	SMSCodeClient smscodeClient;
@@ -98,7 +98,7 @@ public class UserService {
 					userDAO.update(entity);
 					
 					// Call AccountMicroservice - Update Username - Account
-					httpResponse = accountCliente.changeUsernameForAccount(username,usernameNew,dtAction);
+					httpResponse = accountCliente.updateUsernameAccount(username,usernameNew,dtAction);
 					System.out.println(" Start changeUsernameForAccount  "+ httpResponse.getStatusCode());
 
 					if(httpResponse.getStatusCode() == HttpStatus.OK) {

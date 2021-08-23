@@ -58,15 +58,15 @@ public class UserController {
 	}
 	
  	@PutMapping("/manager/{username}/{usernamenew}/{smscode}/{dtAction}")
-	public ResponseEntity<?> changeUsername(@Validated @PathVariable("username") String username, 
+	public ResponseEntity<?> updateUsernameAccess(@Validated @PathVariable("username") String username, 
 			@PathVariable("usernamenew") String usernamenew,@PathVariable("smscode") String smscode,
 			@PathVariable("dtAction") String dtAction) {
 			return userService.updateUsernameByValidateSMSCode(username, usernamenew, smscode, dtAction);
 	}
 
  
- 	@PutMapping("/manager/")
-	public ResponseEntity<?> changePasswordToUser(@Validated @RequestBody UserDto user) {
+ 	@PutMapping("/manager")
+	public ResponseEntity<?> updatePasswordAccess(@Validated @RequestBody UserDto user) {
 		return userService.updatePasswordByUsername(user);
 	}
 

@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @FeignClient(name="pcks-account-customer-core")
-public interface AccountClient {
+public interface CustomerClient {
 	
 	@PutMapping("/account/customer/{username}/{usernamenew}/{dtAction}")
-	public ResponseEntity<?> changeUsernameForAccount(
+	public ResponseEntity<?> updateUsernameAccount(
 			@Validated @PathVariable ("username") String username,
 			@Validated @PathVariable ("usernamenew") String usernamenew,
 			@Validated @PathVariable ("dtAction") String dtAction);
