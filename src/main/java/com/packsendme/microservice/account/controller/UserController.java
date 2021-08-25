@@ -65,7 +65,7 @@ public class UserController {
 	}
 
  
- 	@PutMapping("/manager/{username}/{password}/{dtUpdate}")
+ 	@PutMapping("/manager/password/{username}/{password}/{dtUpdate}")
 	public ResponseEntity<?> updatePasswordAccess(@Validated @PathVariable("username") String username,
 			@Validated @PathVariable("password") String password, @PathVariable("dtUpdate") String dtUpdate) {
 		return userService.updatePasswordByUsername(username,password,dtUpdate);
