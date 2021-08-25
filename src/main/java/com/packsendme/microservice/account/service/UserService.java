@@ -126,14 +126,13 @@ public class UserService {
 			e.printStackTrace();
 			return new ResponseEntity<>(responseUpdateObj, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 	}
 	
-	public ResponseEntity<?> updatePasswordByUsername(UserDto user) {
+	public ResponseEntity<?> updatePasswordByUsername(String username, String password, String dtUpdate) {
 		Response<UserModel> responseObj = new Response<UserModel>(0,HttpExceptionPackSend.UPDATE_PASSWORD.getAction(), null);
 
 		UserModel entityFind = new UserModel();
-		entityFind.setUsername(user.getUsername());
+		entityFind.setUsername(username);
 		System.out.println(" updatePasswordByUsername - USERNAME "+ entityFind.getUsername());
 
 		try {
@@ -141,10 +140,9 @@ public class UserService {
 			System.out.println(" updatePasswordByUsername - find "+ entityFind.getUsername());
 
 			if(entity != null) {
-				entity.setPassword(user.getPassword());
-				entity.setDateUpdate(formatObj.convertStringToDate(user.getDateOperation()));
+				entity.setPassword(password);
+				entity.setDateUpdate(formatObj.convertStringToDate(dtUpdate));
 				System.out.println(" updatePasswordByUsername - password "+ entityFind.getPassword());
-
 				userDAO.update(entity);
 				return new ResponseEntity<>(responseObj, HttpStatus.OK);
 			}
