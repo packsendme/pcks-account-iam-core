@@ -54,11 +54,9 @@ public class UserService {
 				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
 				if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
-					JsonReader jr = new JsonReader(new StringReader(json.trim())); 
-					jr.setLenient(true); 
-					NamesAccountDto namesDto = gson.fromJson(jr, NamesAccountDto.class);
-					userDto.setFirstName(namesDto.getFirstName());
-					userDto.setLastName(namesDto.getLastName());
+					NamesAccountDto namesDto = gson.fromJson(json.trim(), NamesAccountDto.class);
+					userDto.setFirstName(namesDto.getFirstName().trim());
+					userDto.setLastName(namesDto.getLastName().trim());
 				}
 				responseObj = new Response<UserDto>(0,HttpExceptionPackSend.LOGIN_USER.getAction(), userDto);
 				return new ResponseEntity<>(responseObj, HttpStatus.FOUND);
