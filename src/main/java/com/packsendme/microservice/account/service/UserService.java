@@ -1,5 +1,6 @@
 package com.packsendme.microservice.account.service;
 
+import java.io.StringReader;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.packsendme.lib.common.constants.generic.HttpExceptionPackSend;
 import com.packsendme.lib.common.constants.generic.MicroservicesConstants;
 import com.packsendme.lib.common.response.Response;
@@ -52,7 +54,9 @@ public class UserService {
 				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
 				if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
-					NamesAccountDto namesDto = gson.fromJson(json, NamesAccountDto.class);
+					JsonReader jr = new JsonReader(new StringReader(json.trim())); 
+					jr.setLenient(true); 
+					NamesAccountDto namesDto = gson.fromJson(jr, NamesAccountDto.class);
 					userDto.setFirstName(namesDto.getFirstName());
 					userDto.setLastName(namesDto.getLastName());
 				}
