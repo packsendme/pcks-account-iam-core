@@ -54,7 +54,8 @@ public class UserService {
 				ResponseEntity<?> opResultAccount = accountCliente.loadFirstNameAccount(username);
 				if(opResultAccount.getStatusCode() == HttpStatus.OK) {
 					String json = opResultAccount.getBody().toString();
-					NamesAccountDto namesDto = gson.fromJson(json.trim(), NamesAccountDto.class);
+					String jsonTrim = json.trim();
+					NamesAccountDto namesDto = gson.fromJson(jsonTrim, NamesAccountDto.class);
 					userDto.setFirstName(namesDto.getFirstName().trim());
 					userDto.setLastName(namesDto.getLastName().trim());
 				}
